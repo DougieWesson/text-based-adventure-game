@@ -1,3 +1,5 @@
+# - This was the original project brief, further design and content are additional to such -
+
 # Text Adventure Game
 
 In this project you will be making a retro text adventure game.
