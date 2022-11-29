@@ -1,12 +1,11 @@
 public class Game {
-  private Player player;
+  private final Player player;
 
-  private Level levelOne;
-  private Level levelTwo;
-  private Level levelThree;
+  private final Level levelOne;
+  private final Level levelTwo;
+  private final Level levelThree;
   private Level currentLevel;
 
-  private boolean quitting = false;
 
   public Game(Player player, Level levelOne, Level levelTwo, Level levelThree) {
     this.levelOne = levelOne;
@@ -47,11 +46,8 @@ public class Game {
         feedback = moveCommand(command);
         break;
       case "inspect":
+      case "look":
         feedback = inspectCommand(command);
-        break;
-      case "break":
-      case "destroy":
-        feedback = breakCommand(command);
         break;
       case "address":
       case "speak":
@@ -167,12 +163,12 @@ public class Game {
       return "You don't have anything to use.";
     }
     try {
-    firstInput = command.split(" ")[1];
+      firstInput = command.split(" ")[1];
     } catch (Exception e) {
       return "What do you want to use?";
     }
     try {
-      String firstThing = player.getInventory().get(firstInput).name;
+      player.getInventory().get(firstInput).getName();
     } catch (Exception e) {
       return "That's not a thing in your inventory.";
     }
@@ -182,7 +178,7 @@ public class Game {
       return "What do you want to use that on?";
     }
     try {
-      String secondThing = player.getCurrentRoom().getContents().get(secondInput).name;
+      player.getCurrentRoom().getContents().get(secondInput).getName();
     } catch (Exception e) {
       return "That's not a thing in this room.";
     }
@@ -210,74 +206,81 @@ public class Game {
     return "That doesn't work here.";
   }
 
-  public String breakCommand(String command) {
-    String feedback;
-    try {
-      String input = command.split(" ")[1];
-      try {
-        RoomThing foundThing = player.getCurrentRoom().getContents().get(input);
-        if (foundThing.getClass().equals(RoomThingTool.class)) {
-          ((RoomThingTool) foundThing).setBroken(true);
-          feedback = "You broke it!";
-        } else {
-          feedback = "Can't break that.";
-        }
-      } catch (Exception e) {
-        feedback = "Can't break that.";
-      }
-    } catch (Exception e) {
-      feedback = "What did you want to break?";
-    }
-    return feedback;
-  }
-
-  public String talkToCommand(String command) {
-    String feedback;
+  public String validateTalkCommand(String command) {
     String input;
     if (player.getCurrentRoom().getContents().isEmpty()) {
       return "That's not a thing in this room that can talk to.";
     }
     try {
-      input = command.split(" ")[1].toLowerCase();
-      RoomThing thing = player.getCurrentRoom().getContents().get(input);
-      feedback = thing.talkTo();
-      if (thing.getName().equalsIgnoreCase("jimbo")) {
-        try {
-          levelOne
-                  .getLevelRooms()
-                  .get("workshop")
-                  .putContents(new RoomThingTool("keycard", "A brilliant yellow flake of plastic, looks important", false, false, false));
-          levelOne
-                  .getLevelRooms()
-                  .get("hallway")
-                  .putDirection(Direction.EAST, levelOne.getLevelRooms().get("lockerRoom"));
-          levelOne
-                  .getLevelRooms()
-                  .get("lockerRoom")
-                  .putDirection(Direction.WEST, levelOne.getLevelRooms().get("hallway"));
-        } catch (Exception e) {
-          feedback = "Jimbo couldn't do something...";
-        }
-      }
+      input = command.split(" ")[1];
     } catch (Exception e) {
       return "Who did you want to talk to?";
+    }
+    input = command.split(" ")[1].toLowerCase();
+    try {
+      String thing = player.getCurrentRoom().getContents().get(input).getName();
+    } catch (Exception e) {
+      return "That's not something in this room";
+    }
+    return "No errors";
+  }
+
+  public String talkToCommand(String command) {
+    if (!validateTalkCommand(command).equals("No errors")) {
+      return validateTalkCommand(command);
+    }
+    String feedback;
+    String input = command.split(" ")[1].toLowerCase();
+    RoomThing thing = player.getCurrentRoom().getContents().get(input);
+    feedback = thing.talkTo();
+    if (thing.getName().equalsIgnoreCase("jimbo")) {
+      try {
+        levelOne
+                .getLevelRooms()
+                .get("workshop")
+                .putContents(new RoomThingTool("keycard", "A brilliant yellow flake of plastic, looks important"));
+        levelOne
+                .getLevelRooms()
+                .get("hallway")
+                .putDirection(Direction.EAST, levelOne.getLevelRooms().get("lockerRoom"));
+        levelOne
+                .getLevelRooms()
+                .get("lockerRoom")
+                .putDirection(Direction.WEST, levelOne.getLevelRooms().get("hallway"));
+      } catch (Exception e) {
+        feedback = "Jimbo couldn't do something...";
+      }
     }
     return feedback;
   }
 
-  public String takeCommand(String command) {
-    String feedback;
+  public String validateTakeCommand(String command) {
+    String input;
     if (player.getCurrentRoom().getContents().isEmpty()) {
       return "This room is empty.";
     }
     try {
+      input = command.split(" ")[1];
+    } catch (Exception e) {
+      return "What do you want to take?";
+    }
+    input = command.split(" ")[1];
+    try {
+      player.getCurrentRoom().getContents().get(input).getName();
+    } catch (Exception e) {
+      return "Can't pick that up.";
+    }
+    return "No errors";
+  }
+
+  public String takeCommand(String command) {
+    if (!validateTakeCommand(command).equals("No errors")) {
+      return validateTakeCommand(command);
+    } else {
       String input = command.split(" ")[1];
       RoomThing foundThing = player.getCurrentRoom().getContents().get(input);
-      feedback = foundThing.takeThing(player.getInventory(), player.getCurrentRoom().getContents());
-    } catch (Exception e) {
-      feedback = "Can't pick that up.";
+      return foundThing.takeThing(player.getInventory(), player.getCurrentRoom().getContents());
     }
-    return feedback;
   }
 
   public String showMap(String command) {
@@ -309,13 +312,12 @@ public class Game {
   }
 
   public String checkInventory() {
-    String inventory = "";
     if (player.getInventory().isEmpty()) {
       return "Nothing in your inventory";
+    } else {
+      String inventory = "You have these items in your inventory:";
+      inventory += String.join(", ", player.getInventory().keySet());
+      return inventory;
     }
-    for (String thing : player.getInventory().keySet()) {
-      inventory = inventory + thing + ", ";
-    }
-    return inventory;
   }
 }

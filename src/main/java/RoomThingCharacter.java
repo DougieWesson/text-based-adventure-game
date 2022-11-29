@@ -2,7 +2,7 @@ import java.util.HashMap;
 
 public class RoomThingCharacter extends RoomThing {
 
-  private String speech;
+  private final String speech;
 
   public RoomThingCharacter(String name, String description, String speech) {
     super(name, description);

@@ -3,14 +3,11 @@ import java.util.HashMap;
 public class Level {
 
     private static final int CELL_SIZE = 100;
-    private Room startingRoom;
-    private Room endingRoom;
-    private String successMessage;
-    private int width;
-    private int height;
-    private Board board;
-    private BoardWindow boardWindow;
-    private HashMap<String, Room> levelRooms;
+    private final Room startingRoom;
+    private final Room endingRoom;
+    private final String successMessage;
+    private final BoardWindow boardWindow;
+    private final HashMap<String, Room> levelRooms;
 
     public Level(Room startingRoom, Room endingRoom, String successMessage, int width, int height) {
         this.startingRoom = startingRoom;
@@ -19,20 +16,8 @@ public class Level {
         this.levelRooms = new HashMap<>();
         levelRooms.put(startingRoom.getName(), startingRoom);
         levelRooms.put(endingRoom.getName(), endingRoom);
-        this.board = new Board(height, width);
+        Board board = new Board(height, width);
         this.boardWindow = new BoardWindow(board, "Area Map", CELL_SIZE);
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public Board getBoard() {
-        return board;
     }
 
     public BoardWindow getBoardWindow() {
@@ -55,7 +40,7 @@ public class Level {
         return levelRooms;
     }
 
-    public void putLevelRooms(String roomName, Room newRoom) {
-        levelRooms.put(roomName, newRoom);
+    public void putLevelRooms(Room newRoom) {
+        levelRooms.put(newRoom.getName(), newRoom);
     }
 }
