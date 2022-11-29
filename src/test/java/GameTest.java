@@ -139,7 +139,7 @@ class GameTest {
     when(mockedPlayer.getInventory()).thenReturn(mockedInventory);
     when(mockedPlayer.getCurrentRoom()).thenReturn(mockedRoom);
     String actual = gameUnderTest.runCommand(mockedCommand);
-    String expected = "mockedRoomThingToolName, ";
+    String expected = "You have these items in your inventory:mockedRoomThingToolName";
     assertEquals(expected, actual);
   }
 
@@ -173,7 +173,7 @@ class GameTest {
     when(mockedPlayer.getCurrentRoom()).thenReturn(mockedRoom);
     when(mockedPlayer.getInventory()).thenReturn(mockedInventory);
     String actual = gameUnderTest.runCommand(mockedCommand);
-    String expected = "Can't pick that up.";
+    String expected = "What do you want to take?";
     assertEquals(expected, actual);
   }
 

@@ -16,6 +16,7 @@ public class Descriptions {
   public static final String VENT = "A functional service vent, it seems a little unstable.";
   public static final String LEVEL_ONE_SUCCESS = "You have crawled into the vent and make your way to the living quarters of the ship, the vent shaft collapsing as you leave it.";
 
+
   //Level Two Room Descriptions
   public static final String HALLWAY_TWO = "Hallway flavour space";
 
@@ -30,6 +31,7 @@ public class Descriptions {
   public static final String STORAGE = "A storage room, for dust apparently.";
 
   public static final String STAIRWAY = "Stairs down to the flight deck.";
+
 
   //Level Three Room Descriptions
 

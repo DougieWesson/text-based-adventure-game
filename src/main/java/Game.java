@@ -75,6 +75,9 @@ public class Game {
       case "use":
         feedback = useCommand(command);
         break;
+      case "cheat":
+        feedback = cheatCommand(command);
+        break;
       case "quit":
         feedback = "Goodbye";
         break;
@@ -320,4 +323,33 @@ public class Game {
       return inventory;
     }
   }
+
+  public String validateCheatCommand(String command) {
+    try {
+      String input = command.split(" ")[1];
+    }catch (Exception e) {
+      return "Are you trying to cheat?";
+    }
+    return "No errors";
+  }
+
+  public String cheatCommand(String command) {
+    if(!validateCheatCommand(command).equals("No errors")){
+      return validateCheatCommand(command);
+    } else {
+      switch (command.split(" ")[1]){
+        case "primus":
+          return skipLevelOne();
+        default:
+          return "Cheat failed, ya cheater.";
+      }
+    }
+  }
+
+  public String skipLevelOne() {
+    player.setCurrentRoom(levelOne.getLevelRooms().get("office"));
+    player.getInventory().put("keycard", new RoomThingTool("keycard", "A brilliant yellow flake of plastic, looks important"));
+    return "Level One Skipped, use keycard on grate to escape.";
+  }
+
 }
