@@ -1,6 +1,4 @@
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.stream.Collectors;
 
 public class Room {
 
@@ -8,16 +6,16 @@ public class Room {
 
   private final String description;
 
-  private HashMap<Direction, Room> directions;
+  private final HashMap<Direction, Room> directions;
 
-  private HashMap<String, RoomThing> contents;
+  private final HashMap<String, RoomThing> contents;
   private int row;
 
   private int column;
 
-  private int levelWidth;
+  private final int levelWidth;
 
-  private int levelHeight;
+  private final int levelHeight;
 
   public Room(String name, String description, int levelWidth, int levelHeight) {
     this.name = name;
@@ -97,26 +95,6 @@ public class Room {
 
   public void setColumn(int column) {
     this.column = column;
-  }
-
-  public int getLevelWidth() {
-    return levelWidth;
-  }
-
-  public void setLevelWidth(int levelWidth) {
-    this.levelWidth = levelWidth;
-  }
-
-  public int getLevelHeight() {
-    return levelHeight;
-  }
-
-  public void setLevelHeight(int levelHeight) {
-    this.levelHeight = levelHeight;
-  }
-
-  public void setContents(HashMap<String, RoomThing> contents) {
-    this.contents = contents;
   }
 
   public void addContents(RoomThing thing) {

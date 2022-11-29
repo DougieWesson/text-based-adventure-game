@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Player {
@@ -6,7 +5,7 @@ public class Player {
   public static final String WRONG_WAY_MESSAGE = "you slam into a wall, physically you're fine, but emotionally you may never recover.";
   private Room currentRoom;
   private Level level;
-  private HashMap<String, RoomThingTool> inventory;
+  private final HashMap<String, RoomThingTool> inventory;
 
   public Player(Room currentRoom, Level level) {
     this.inventory = new HashMap<>();
@@ -22,7 +21,7 @@ public class Player {
   }
 
   public String move(Direction direction) {
-    String feedback = "";
+    String feedback;
     Room nextRoom = currentRoom.getDirections().get(direction);
     if (nextRoom != null) {
       if (this.level.getStartingRoom().equals(this.currentRoom)) {
@@ -38,10 +37,6 @@ public class Player {
     }
     this.level.getBoardWindow().repaint();
     return feedback;
-  }
-
-  public Level getLevel() {
-    return level;
   }
 
   public void setLevel(Level level) {
