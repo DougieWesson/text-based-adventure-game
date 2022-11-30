@@ -38,75 +38,86 @@ public class Game {
 
   public String runCommand(String command) {
     String feedback;
-    switch (command.split(" ")[0]) {
-      case "move":
-      case "go":
-      case "run":
-      case "crawl":
-        feedback = moveCommand(command);
-        break;
-      case "inspect":
-      case "look":
-        feedback = inspectCommand(command);
-        break;
-      case "address":
-      case "speak":
-      case "talk":
-        feedback = talkToCommand(command);
-        break;
-      case "show":
-        feedback = showMap(command);
-        break;
-      case "hide":
-        feedback = hideMap(command);
-        break;
-      case "take":
-      case "grab":
-      case "get":
-      case "collect":
-      case "pickup":
-        feedback = takeCommand(command);
-        break;
-      case "check":
-        if (command.split(" ").length > 1 && command.split(" ")[1].equals("inventory")) {
-          feedback = checkInventory();
-        } else feedback = "Check what?";
-        break;
-      case "use":
-        feedback = useCommand(command);
-        break;
-      case "cheat":
-        feedback = cheatCommand(command);
-        break;
-      case "quit":
-        feedback = "Goodbye";
-        break;
-      default:
-        feedback = "I don't understand";
+    if (command.isEmpty()) {
+      feedback = "Enter a command";
+    } else {
+      currentLevel.getBoardWindow().getTextArea().append("\n > " + command);
+      switch (command.split(" ")[0]) {
+        case "move":
+        case "go":
+        case "run":
+        case "crawl":
+          feedback = moveCommand(command);
+          break;
+        case "inspect":
+        case "look":
+          feedback = inspectCommand(command);
+          break;
+        case "address":
+        case "speak":
+        case "talk":
+          feedback = talkToCommand(command);
+          break;
+        case "show":
+          feedback = showMap(command);
+          break;
+        case "hide":
+          feedback = hideMap(command);
+          break;
+        case "take":
+        case "grab":
+        case "get":
+        case "collect":
+        case "pickup":
+          feedback = takeCommand(command);
+          break;
+        case "check":
+          if (command.split(" ").length > 1 && command.split(" ")[1].equals("inventory")) {
+            feedback = checkInventory();
+          } else feedback = "Check what?";
+          break;
+        case "use":
+          feedback = useCommand(command);
+          break;
+        case "cheat":
+          feedback = cheatCommand(command);
+          break;
+        case "quit":
+          feedback = "Goodbye";
+          System.exit(0);
+          break;
+        default:
+          feedback = "I don't understand";
+      }
+      if (hasFinishedLevelOne()) {
+        this.levelOne.getBoardWindow().hideBoard();
+        this.levelTwo.getBoardWindow().showBoard();
+        feedback = levelOne.getSuccessMessage();
+        this.getPlayer().setCurrentRoom(levelTwo.getStartingRoom());
+        this.setCurrentLevel(levelTwo);
+        getCurrentLevel().getBoardWindow().getInputField().addKeyListener(new UserInput(this));
+
+        this.getPlayer().setLevel(levelTwo);
+        this.getCurrentLevel().getBoardWindow().getBoard().setCell(this.player.getCurrentRoom().getRow(), this.player.getCurrentRoom().getColumn(), CellType.CURRENT_ROOM);
+        this.levelTwo.getBoardWindow().repaint();
+      }
+      if (hasFinishedLevelTwo()) {
+        this.levelTwo.getBoardWindow().hideBoard();
+        this.levelThree.getBoardWindow().showBoard();
+        feedback = levelTwo.getSuccessMessage();
+        this.getPlayer().setCurrentRoom(levelThree.getStartingRoom());
+        this.setCurrentLevel(levelThree);
+        getCurrentLevel().getBoardWindow().getInputField().addKeyListener(new UserInput(this));
+
+        this.getPlayer().setLevel(levelThree);
+        this.getCurrentLevel().getBoardWindow().getBoard().setCell(this.player.getCurrentRoom().getRow(), this.player.getCurrentRoom().getColumn(), CellType.CURRENT_ROOM);
+        this.levelThree.getBoardWindow().repaint();
+      }
+      if (hasFinishedGame()) {
+        feedback = levelThree.getSuccessMessage();
+      }
     }
-    if (hasFinishedLevelOne()) {
-      this.levelOne.getBoardWindow().hideBoard();
-      this.levelTwo.getBoardWindow().showBoard();
-      feedback = levelOne.getSuccessMessage();
-      this.getPlayer().setCurrentRoom(levelTwo.getStartingRoom());
-      this.setCurrentLevel(levelTwo);
-      this.getPlayer().setLevel(levelTwo);
-      this.getCurrentLevel().getBoardWindow().getBoard().setCell(this.player.getCurrentRoom().getRow(), this.player.getCurrentRoom().getColumn(), CellType.CURRENT_ROOM);
-      this.levelTwo.getBoardWindow().repaint();
-    }
-    if (hasFinishedLevelTwo()) {
-      this.levelTwo.getBoardWindow().hideBoard();
-      this.levelThree.getBoardWindow().showBoard();
-      feedback = levelTwo.getSuccessMessage();
-      this.getPlayer().setCurrentRoom(levelThree.getStartingRoom());
-      this.setCurrentLevel(levelThree);
-      this.getPlayer().setLevel(levelThree);
-      this.getCurrentLevel().getBoardWindow().getBoard().setCell(this.player.getCurrentRoom().getRow(), this.player.getCurrentRoom().getColumn(), CellType.CURRENT_ROOM);
-      this.levelThree.getBoardWindow().repaint();
-    }
-    if (hasFinishedGame()) {
-      feedback = levelThree.getSuccessMessage();
-    }
+    currentLevel.getBoardWindow().getTextArea().append("\n" + feedback);
     return feedback;
   }
 
@@ -294,12 +305,12 @@ public class Game {
       return "Are you trying to show the map?";
     }
     input = command.split(" ")[1];
-      if (input.equals("map")) {
-        this.getCurrentLevel().getBoardWindow().showBoard();
-        return "Map shown";
-      } else {
-        return "Pardon?";
-      }
+    if (input.equals("map")) {
+      this.getCurrentLevel().getBoardWindow().showBoard();
+      return "Map shown";
+    } else {
+      return "Pardon?";
+    }
   }
 
   public String hideMap(String command) {
@@ -329,17 +340,17 @@ public class Game {
   public String validateCheatCommand(String command) {
     try {
       String input = command.split(" ")[1];
-    }catch (Exception e) {
+    } catch (Exception e) {
       return "Are you trying to cheat?";
     }
     return "No errors";
   }
 
   public String cheatCommand(String command) {
-    if(!validateCheatCommand(command).equals("No errors")){
+    if (!validateCheatCommand(command).equals("No errors")) {
       return validateCheatCommand(command);
     } else {
-      switch (command.split(" ")[1]){
+      switch (command.split(" ")[1]) {
         case "primus":
           return skipLevelOne();
         default:

@@ -1,9 +1,12 @@
 import javax.swing.*;
+import javax.swing.text.DefaultCaret;
 import java.awt.*;
 
 public class BoardWindow extends Canvas {
 
   private JFrame frame;
+  private JTextArea textArea;
+  private JTextField inputField;
   private Board board;
 
   private String title;
@@ -27,7 +30,19 @@ public class BoardWindow extends Canvas {
     this.frame = new JFrame(this.title);
     this.frame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
     this.setSize(board.getColumnCount() * cellSize, board.getRowCount() * cellSize);
-    this.frame.add(this);
+    this.textArea = new JTextArea();
+    this.inputField = new JTextField();
+    this.frame.getContentPane().add(this, BorderLayout.NORTH);
+    textArea.setRows(10);
+    textArea.setLineWrap(true);
+    textArea.setWrapStyleWord(true);
+    textArea.setEditable(false);
+    JScrollPane scroll = new JScrollPane (textArea,
+            JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+    DefaultCaret caret = (DefaultCaret)textArea.getCaret();
+    caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+    this.frame.getContentPane().add(scroll, BorderLayout.CENTER);
+    this.frame.getContentPane().add(inputField, BorderLayout.SOUTH);
     this.frame.pack();
     this.frame.setVisible(true);
   }
@@ -93,5 +108,13 @@ public class BoardWindow extends Canvas {
 
   public void setTitle(String title) {
     this.title = title;
+  }
+
+  public JTextArea getTextArea() {
+    return textArea;
+  }
+
+  public JTextField getInputField() {
+    return inputField;
   }
 }
