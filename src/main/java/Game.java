@@ -287,17 +287,19 @@ public class Game {
   }
 
   public String showMap(String command) {
-    String feedback = "What do you want to do?";
+    String input;
     try {
-      String input = command.split(" ")[1];
-      if ("map".equals(input)) {
-        this.getCurrentLevel().getBoardWindow().showBoard();
-        feedback = "Map shown";
-      }
+      input = command.split(" ")[1];
     } catch (Exception e) {
-      feedback = "What are you showing?";
+      return "Are you trying to show the map?";
     }
-    return feedback;
+    input = command.split(" ")[1];
+      if (input.equals("map")) {
+        this.getCurrentLevel().getBoardWindow().showBoard();
+        return "Map shown";
+      } else {
+        return "Pardon?";
+      }
   }
 
   public String hideMap(String command) {
