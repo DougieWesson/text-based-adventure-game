@@ -197,7 +197,8 @@ public class Main {
     return levelThree;
   }
 
-  private static final String BOOT_MESSAGE = "Welcome to (title pending)! I hope you enjoy the game, and type 'help' if you need any guidance with the commands. -DW" + "\n you awaken in a tiny gloomy room. you are sat on a filthy bed covered with " +
+  private static final String BOOT_MESSAGE = "Welcome to (title pending)! I hope you enjoy the game, and type 'help' if you need any guidance with the commands. -DW" +
+          "\nYou awaken in a tiny gloomy room. You are sat on a filthy bed covered with " +
           "a coarse blanket, no pillow, and a NORMAL bucket is on the opposite side " +
           "of the room. The thick iron door on the east wall has been left ajar and you briefly consider giving them a scathing " +
           "review on trip advisor, but settle on escaping this dingy vessel instead.";

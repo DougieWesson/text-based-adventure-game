@@ -79,6 +79,9 @@ public class Game {
         case "use":
           feedback = useCommand(command);
           break;
+        case "dance":
+          feedback = "You do a funky little dance, but no one is impressed.";
+          break;
         case "cheat":
           feedback = cheatCommand(command);
           break;
@@ -96,7 +99,6 @@ public class Game {
         this.getPlayer().setCurrentRoom(levelTwo.getStartingRoom());
         this.setCurrentLevel(levelTwo);
         getCurrentLevel().getBoardWindow().getInputField().addKeyListener(new UserInput(this));
-
         this.getPlayer().setLevel(levelTwo);
         this.getCurrentLevel().getBoardWindow().getBoard().setCell(this.player.getCurrentRoom().getRow(), this.player.getCurrentRoom().getColumn(), CellType.CURRENT_ROOM);
         this.levelTwo.getBoardWindow().repaint();
@@ -108,7 +110,6 @@ public class Game {
         this.getPlayer().setCurrentRoom(levelThree.getStartingRoom());
         this.setCurrentLevel(levelThree);
         getCurrentLevel().getBoardWindow().getInputField().addKeyListener(new UserInput(this));
-
         this.getPlayer().setLevel(levelThree);
         this.getCurrentLevel().getBoardWindow().getBoard().setCell(this.player.getCurrentRoom().getRow(), this.player.getCurrentRoom().getColumn(), CellType.CURRENT_ROOM);
         this.levelThree.getBoardWindow().repaint();
@@ -223,7 +224,7 @@ public class Game {
   public String validateTalkCommand(String command) {
     String input;
     if (player.getCurrentRoom().getContents().isEmpty()) {
-      return "That's not a thing in this room that can talk to.";
+      return "This is an empty room...";
     }
     try {
       input = command.split(" ")[1];

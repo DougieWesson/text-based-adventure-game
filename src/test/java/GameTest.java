@@ -31,6 +31,27 @@ class GameTest {
   }
 
 
+  //Get Player
+  @Test
+  void getPlayer() {
+    assertEquals(mockedPlayer, gameUnderTest.getPlayer());
+  }
+
+
+  //Empty Command
+  @Test
+  void runCommand_Null() {
+    String mockedCommand = "";
+    BoardWindow mockedBoardWindow = mock(BoardWindow.class);
+    JTextArea mockedTextArea = mock(JTextArea.class);
+    when(mockedLevelOne.getBoardWindow()).thenReturn(mockedBoardWindow);
+    when(mockedBoardWindow.getTextArea()).thenReturn(mockedTextArea);
+    String actual = gameUnderTest.runCommand(mockedCommand);
+    String expected = "Enter a command";
+    assertEquals(expected, actual);
+  }
+
+
   //Move Command
   @Test
   void runCommand_MoveNorth() {
@@ -138,6 +159,138 @@ class GameTest {
   }
 
 
+  //Inspect Command
+  @Test
+  void runCommand_Inspect_Null() {
+    String mockedCommand = "inspect";
+    when(mockedPlayer.getCurrentRoom()).thenReturn(mockedRoom);
+    BoardWindow mockedBoardWindow = mock(BoardWindow.class);
+    JTextArea mockedTextArea = mock(JTextArea.class);
+    when(mockedLevelOne.getBoardWindow()).thenReturn(mockedBoardWindow);
+    when(mockedBoardWindow.getTextArea()).thenReturn(mockedTextArea);
+    String actual = gameUnderTest.runCommand(mockedCommand);
+    String expected = "What did you want to inspect?";
+    assertEquals(expected, actual);
+  }
+  @Test
+  void runCommand_Inspect_Room() {
+    String mockedCommand = "inspect room";
+    when(mockedPlayer.getCurrentRoom()).thenReturn(mockedRoom);
+    BoardWindow mockedBoardWindow = mock(BoardWindow.class);
+    JTextArea mockedTextArea = mock(JTextArea.class);
+    when(mockedLevelOne.getBoardWindow()).thenReturn(mockedBoardWindow);
+    when(mockedBoardWindow.getTextArea()).thenReturn(mockedTextArea);
+    when(mockedRoom.listContents()).thenReturn("mock room contents");
+    String actual = gameUnderTest.runCommand(mockedCommand);
+    String expected = "mock room contents";
+    assertEquals(expected, actual);
+  }
+  @Test
+  void runCommand_Inspect_RoomThing_Correct() {
+    String mockedCommand = "inspect screwdriver";
+    when(mockedPlayer.getCurrentRoom()).thenReturn(mockedRoom);
+    BoardWindow mockedBoardWindow = mock(BoardWindow.class);
+    JTextArea mockedTextArea = mock(JTextArea.class);
+    when(mockedLevelOne.getBoardWindow()).thenReturn(mockedBoardWindow);
+    when(mockedBoardWindow.getTextArea()).thenReturn(mockedTextArea);
+    HashMap<String, RoomThing> mockedContents = new HashMap<>();
+    RoomThingTool mockedRoomThingTool = mock(RoomThingTool.class);
+    mockedContents.put("screwdriver", mockedRoomThingTool);
+    when(mockedRoom.getContents()).thenReturn(mockedContents);
+    when(mockedRoomThingTool.inspect()).thenReturn("screwdriver description");
+    String actual = gameUnderTest.runCommand(mockedCommand);
+    String expected = "screwdriver description";
+    assertEquals(expected, actual);
+  }
+  @Test
+  void runCommand_Inspect_RoomThing_Wrong() {
+    String mockedCommand = "inspect screwball";
+    when(mockedPlayer.getCurrentRoom()).thenReturn(mockedRoom);
+    BoardWindow mockedBoardWindow = mock(BoardWindow.class);
+    JTextArea mockedTextArea = mock(JTextArea.class);
+    when(mockedLevelOne.getBoardWindow()).thenReturn(mockedBoardWindow);
+    when(mockedBoardWindow.getTextArea()).thenReturn(mockedTextArea);
+    HashMap<String, RoomThing> mockedContents = new HashMap<>();
+    RoomThingTool mockedRoomThingTool = mock(RoomThingTool.class);
+    mockedContents.put("screwdriver", mockedRoomThingTool);
+    when(mockedRoom.getContents()).thenReturn(mockedContents);
+    when(mockedRoomThingTool.inspect()).thenReturn("screwdriver description");
+    String actual = gameUnderTest.runCommand(mockedCommand);
+    String expected = "What did you want to inspect?";
+    assertEquals(expected, actual);
+  }
+
+
+  //Talk Command
+  @Test
+  void runCommand_Talk_Null() {
+    String mockedCommand = "talk";
+    BoardWindow mockedBoardWindow = mock(BoardWindow.class);
+    JTextArea mockedTextArea = mock(JTextArea.class);
+    when(mockedLevelOne.getBoardWindow()).thenReturn(mockedBoardWindow);
+    when(mockedBoardWindow.getTextArea()).thenReturn(mockedTextArea);
+    HashMap<String, RoomThing> mockedContents = new HashMap<>();
+    RoomThingTool mockedRoomThingTool = mock(RoomThingTool.class);
+    mockedContents.put("screwdriver", mockedRoomThingTool);
+    when(mockedRoom.getContents()).thenReturn(mockedContents);
+    when(mockedRoomThingTool.getName()).thenReturn("screwdriver");
+    when(mockedPlayer.getCurrentRoom()).thenReturn(mockedRoom);
+    String actual = gameUnderTest.runCommand(mockedCommand);
+    String expected = "Who did you want to talk to?";
+    assertEquals(expected, actual);
+  }
+  @Test
+  void runCommand_Talk_EmptyRoom() {
+    String mockedCommand = "talk screwdriver";
+    BoardWindow mockedBoardWindow = mock(BoardWindow.class);
+    JTextArea mockedTextArea = mock(JTextArea.class);
+    when(mockedLevelOne.getBoardWindow()).thenReturn(mockedBoardWindow);
+    when(mockedBoardWindow.getTextArea()).thenReturn(mockedTextArea);
+    HashMap<String, RoomThing> mockedContents = new HashMap<>();
+    when(mockedRoom.getContents()).thenReturn(mockedContents);
+    when(mockedPlayer.getCurrentRoom()).thenReturn(mockedRoom);
+    String actual = gameUnderTest.runCommand(mockedCommand);
+    String expected = "This is an empty room...";
+    assertEquals(expected, actual);
+  }
+  @Test
+  void runCommand_Talk_WrongThing() {
+    String mockedCommand = "talk hammer";
+    BoardWindow mockedBoardWindow = mock(BoardWindow.class);
+    JTextArea mockedTextArea = mock(JTextArea.class);
+    when(mockedLevelOne.getBoardWindow()).thenReturn(mockedBoardWindow);
+    when(mockedBoardWindow.getTextArea()).thenReturn(mockedTextArea);
+    HashMap<String, RoomThing> mockedContents = new HashMap<>();
+    RoomThingTool mockedRoomThingTool = mock(RoomThingTool.class);
+    mockedContents.put("screwdriver", mockedRoomThingTool);
+    when(mockedRoom.getContents()).thenReturn(mockedContents);
+    when(mockedRoomThingTool.getName()).thenReturn("screwdriver");
+    when(mockedPlayer.getCurrentRoom()).thenReturn(mockedRoom);
+    String actual = gameUnderTest.runCommand(mockedCommand);
+    String expected = "That's not something in this room";
+    assertEquals(expected, actual);
+  }
+  @Test
+  void runCommand_Talk_Correct() {
+    String mockedCommand = "talk screwdriver";
+    BoardWindow mockedBoardWindow = mock(BoardWindow.class);
+    JTextArea mockedTextArea = mock(JTextArea.class);
+    when(mockedLevelOne.getBoardWindow()).thenReturn(mockedBoardWindow);
+    when(mockedBoardWindow.getTextArea()).thenReturn(mockedTextArea);
+    HashMap<String, RoomThing> mockedContents = new HashMap<>();
+    RoomThingTool mockedRoomThingTool = mock(RoomThingTool.class);
+    mockedContents.put("screwdriver", mockedRoomThingTool);
+    when(mockedRoom.getContents()).thenReturn(mockedContents);
+    when(mockedRoomThingTool.getName()).thenReturn("screwdriver");
+    when(mockedPlayer.getCurrentRoom()).thenReturn(mockedRoom);
+    when(mockedRoomThingTool.talkTo()).thenReturn("screwdriver speech");
+    String actual = gameUnderTest.runCommand(mockedCommand);
+    String expected = "screwdriver speech";
+    assertEquals(expected, actual);
+  }
+
+
+
   //Check Inventory Command
   @Test
   void runCommand_CheckEmptyInventory() {
@@ -194,8 +347,8 @@ class GameTest {
   void runCommand_TakeItem() {
     String mockedCommand = "take screwdriver";
     RoomThingTool mockedRoomThingTool = mock(RoomThingTool.class);
-    HashMap<String, RoomThingTool> mockedInventory = new HashMap<>();
     HashMap<String, RoomThing> mockedContents = new HashMap<>();
+    HashMap<String, RoomThingTool> mockedInventory = new HashMap<>();
     mockedContents.put("screwdriver", mockedRoomThingTool);
     when(mockedRoom.getContents()).thenReturn(mockedContents);
     when(mockedRoomThingTool.getName()).thenReturn("screwdriver");
@@ -426,6 +579,43 @@ class GameTest {
   }
 
 
+  //Hide Map Command
+  @Test
+  void runCommand_HideMapCommand_Null() {
+    String mockedCommand = "hide";
+    when(mockedPlayer.getCurrentRoom()).thenReturn(mockedRoom);
+    BoardWindow mockedBoardWindow = mock(BoardWindow.class);
+    JTextArea mockedTextArea = mock(JTextArea.class);
+    when(mockedLevelOne.getBoardWindow()).thenReturn(mockedBoardWindow);
+    when(mockedBoardWindow.getTextArea()).thenReturn(mockedTextArea);
+    String actual = gameUnderTest.runCommand(mockedCommand);
+    String expected = "What are you hiding?";
+    assertEquals(expected, actual);
+  }
+  @Test
+  void runCommand_HideMapCommand_Wrong() {
+    String mockedCommand = "hide mop";
+    when(mockedPlayer.getCurrentRoom()).thenReturn(mockedRoom);
+    BoardWindow mockedBoardWindow = mock(BoardWindow.class);
+    JTextArea mockedTextArea = mock(JTextArea.class);
+    when(mockedLevelOne.getBoardWindow()).thenReturn(mockedBoardWindow);
+    when(mockedBoardWindow.getTextArea()).thenReturn(mockedTextArea);
+    String actual = gameUnderTest.runCommand(mockedCommand);
+    String expected = "What do you want to do?";
+    assertEquals(expected, actual);
+  }
+  @Test
+  void runCommand_HideMapCommand_Correct() {
+    String mockedCommand = "hide map";
+    when(mockedPlayer.getCurrentRoom()).thenReturn(mockedRoom);
+    BoardWindow mockedBoardWindow = mock(BoardWindow.class);
+    JTextArea mockedTextArea = mock(JTextArea.class);
+    when(mockedLevelOne.getBoardWindow()).thenReturn(mockedBoardWindow);
+    when(mockedBoardWindow.getTextArea()).thenReturn(mockedTextArea);
+    String actual = gameUnderTest.runCommand(mockedCommand);
+    String expected = "Map hidden";
+    assertEquals(expected, actual);
+  }
 
 
   //Cheat Command
