@@ -79,6 +79,12 @@ public class Game {
         case "use":
           feedback = useCommand(command);
           break;
+        case "dance":
+          feedback = "You do a funky little dance, but no one is impressed.";
+          break;
+        case "help":
+          feedback = helpCommand();
+          break;
         case "cheat":
           feedback = cheatCommand(command);
           break;
@@ -96,7 +102,6 @@ public class Game {
         this.getPlayer().setCurrentRoom(levelTwo.getStartingRoom());
         this.setCurrentLevel(levelTwo);
         getCurrentLevel().getBoardWindow().getInputField().addKeyListener(new UserInput(this));
-
         this.getPlayer().setLevel(levelTwo);
         this.getCurrentLevel().getBoardWindow().getBoard().setCell(this.player.getCurrentRoom().getRow(), this.player.getCurrentRoom().getColumn(), CellType.CURRENT_ROOM);
         this.levelTwo.getBoardWindow().repaint();
@@ -108,7 +113,6 @@ public class Game {
         this.getPlayer().setCurrentRoom(levelThree.getStartingRoom());
         this.setCurrentLevel(levelThree);
         getCurrentLevel().getBoardWindow().getInputField().addKeyListener(new UserInput(this));
-
         this.getPlayer().setLevel(levelThree);
         this.getCurrentLevel().getBoardWindow().getBoard().setCell(this.player.getCurrentRoom().getRow(), this.player.getCurrentRoom().getColumn(), CellType.CURRENT_ROOM);
         this.levelThree.getBoardWindow().repaint();
@@ -151,22 +155,76 @@ public class Game {
     return feedback;
   }
 
-  public String inspectCommand(String command) {
-    String feedback = "What did you want to inspect?";
+  public String validateInspectCommand(String command) {
     String nameOfThing;
     try {
       nameOfThing = command.split(" ")[1];
     } catch (Exception e) {
-      return feedback;
+      return "What did you want to inspect?";
     }
+    if (!nameOfThing.equals("room")) {
+      try {
+        String foundThing = player.getCurrentRoom().getContents().get(nameOfThing).getName();
+        return "No errors";
+      } catch (Exception e) {
+        return "That's not something you can inspect.";
+      }
+    } else {
+    return "No errors";
+    }
+  }
+
+  public String inspectCommand(String command) {
+    if(!validateInspectCommand(command).equals("No errors")) {
+      return validateInspectCommand(command);
+    }
+    String nameOfThing= command.split(" ")[1];
     if (nameOfThing.equals("room")) {
-      return player.getCurrentRoom().listContents();
-    }
-    try {
+      return "You are in the " + player.getCurrentRoom().getName() + ". " + player.getCurrentRoom().listContents();
+    } else {
       RoomThing foundThing = player.getCurrentRoom().getContents().get(nameOfThing);
+
+      if(foundThing.getName().equals("fridge")) {
+        levelTwo
+                .getLevelRooms()
+                .get("kitchen")
+                .addContents(new RoomThingTool("code", "Storage code, super secret, don't share! \nThe code is super long and complex, better keep this for reference."));
+        levelTwo
+                .getLevelRooms()
+                .get("kitchen")
+                .addContents(new RoomThingTool("packet", "A frozen meal packet, inedible in it's current state."));
+      }
+
+      if(foundThing.getName().equals("box")) {
+        levelTwo
+                .getLevelRooms()
+                .get("storage")
+                .addContents(new RoomThingTool("lockbox", "A small lockbox, still shiny."));
+
+      }
+
+      if (foundThing.getName().equals("sofa") && player.getCurrentRoom().getName().equals("foyer")) {
+        levelThree
+                .getLevelRooms()
+                .get("foyer")
+                .addContents(new RoomThingTool("key", "A decorative and sleek key."));
+      }
+
+      if (foundThing.getName().equals("desk") && player.getCurrentRoom().getName().equals("first mate's room")) {
+        levelThree
+                .getLevelRooms()
+                .get("first mate's room")
+                .addContents(new RoomThingTool("passcode", "The passcode for the fuel room, apparently."));
+      }
+
+      if(foundThing.getName().equals("notes") && player.getCurrentRoom().getName().equals("captain's room")) {
+        levelThree
+                .getLevelRooms()
+                .get("captain's room")
+                .addContents(new RoomThingTool("combination", "Seems to be a flight initialisation combination, for a personal escape pod."));
+      }
+
       return foundThing.inspect();
-    } catch (Exception e) {
-      return feedback;
     }
   }
 
@@ -209,12 +267,127 @@ public class Game {
     String secondThing = player.getCurrentRoom().getContents().get(secondInput).getName().toLowerCase();
     String roomName = player.getCurrentRoom().getName().toLowerCase();
 
-    if (firstThing.equals("keycard") && secondThing.equals("grate") && roomName.equals("office")) {
+    if (firstThing.equals("screwdriver") && secondThing.equals("vent") && roomName.equals("office")) {
       levelOne
               .getLevelRooms()
               .get("office")
               .putDirection(Direction.NORTH, levelOne.getLevelRooms().get("vent"));
-      return "You open the grate, somehow...";
+      return "You unscrew the cover of the vent, making just enough space for you to crawl through.";
+    }
+
+    if (firstThing.equals("packet") && secondThing.equals("heater") && roomName.equals("kitchen")) {
+      player.getInventory().put("meal", new RoomThingTool("meal", "A hot meal, functional but tasty enough."));
+      player.getInventory().remove("packet");
+      return "You pop the packet into the heater, wait the requisite 2 minutes and retrieve the now surprisingly tasty looking meal";
+    }
+
+    if (firstThing.equals("meal") && secondThing.equals("annie") && roomName.equals("bunks")) {
+      player.getInventory().put("key", new RoomThingTool("key", "A small key, shiny and sleek."));
+      player.getInventory().remove("meal");
+      return "The child hungrily snatches the meal from you, and after snarfing about half of it, hands over a small key in return.";
+    }
+
+    if (firstThing.equals("code") && secondThing.equals("keypad") && roomName.equals("accessway")) {
+      player.getInventory().remove("code");
+      levelTwo
+              .getLevelRooms()
+              .get("accessway")
+              .putDirection(Direction.NORTH, levelTwo.getLevelRooms().get("storage"));
+      levelTwo
+              .getLevelRooms()
+              .get("storage")
+              .putDirection(Direction.SOUTH, levelTwo.getLevelRooms().get("accessway"));
+      return "You open the door to the storage room, and a musty scent drifts out.";
+    }
+
+    if (firstThing.equals("key") && secondThing.equals("lockbox") && roomName.equals("storage")) {
+      player.getInventory().remove("key");
+      levelTwo
+              .getLevelRooms()
+              .get("storage")
+              .addContents(new RoomThingTool("keycard", "An old but functional keycard."));
+      return "The lock on the lockbox clicks open, revealing an old but valid keycard.";
+    }
+
+    if (firstThing.equals("keycard") && secondThing.equals("scanner") && roomName.equals("accessway")) {
+      player.getInventory().remove("keycard");
+      levelTwo
+              .getLevelRooms()
+              .get("accessway")
+              .putDirection(Direction.EAST, levelTwo.getLevelRooms().get("stairway"));
+      return "You open the stairway down to the flight deck, although the faulty scanner eats the keycard.";
+    }
+
+    if (firstThing.equals("key") && secondThing.equals("padlock") && roomName.equals("foyer")) {
+      player.getInventory().remove("key");
+      levelThree
+              .getLevelRooms()
+              .get("foyer")
+              .putDirection(Direction.NORTH, levelThree.getLevelRooms().get("captain's room"));
+      levelThree
+              .getLevelRooms()
+              .get("captain's room")
+              .putDirection(Direction.SOUTH, levelThree.getLevelRooms().get("foyer"));
+      levelThree
+              .getLevelRooms()
+              .get("foyer")
+              .getContents()
+              .remove("padlock");
+      return "You open the padlock, unlocking the door to the North.";
+    }
+
+    if (firstThing.equals("passcode") && secondThing.equals("keypad") && roomName.equals("corridortwo")) {
+      player.getInventory().remove("passcode");
+      levelThree
+              .getLevelRooms()
+              .get("corridorTwo")
+              .putDirection(Direction.SOUTH, levelThree.getLevelRooms().get("fuel room"));
+      levelThree
+              .getLevelRooms()
+              .get("fuel room")
+              .putDirection(Direction.NORTH, levelThree.getLevelRooms().get("corridorTwo"));
+      return "You open the door to the South.";
+    }
+
+    if (firstThing.equals("canister") && secondThing.equals("pod") && roomName.equals("hanger")){
+      player.getInventory().remove("canister");
+      levelThree
+              .getLevelRooms()
+              .get("hanger")
+              .getContents()
+              .remove("pod");
+      levelThree
+              .getLevelRooms()
+              .get("hanger")
+              .addContents(new RoomThingDecoration("partialpod", "A partially fuelled escape pod."));
+      levelThree
+              .getLevelRooms()
+              .get("fuel room")
+              .addContents(new RoomThingTool("canister", "Another fuel canister, should finish the job."));
+      return "The pod seems partially fuelled, but not enough to get you to the planet's surface.";
+    }
+
+    if (firstThing.equals("canister") && secondThing.equals("partialpod") && roomName.equals("hanger")) {
+      player.getInventory().remove("canister");
+      levelThree
+              .getLevelRooms()
+              .get("hanger")
+              .getContents()
+              .remove("partialpod");
+      levelThree
+              .getLevelRooms()
+              .get("hanger")
+              .addContents(new RoomThingDecoration("escape pod", "A fully fuelled escape pod on the North wall."));
+      return "You fully fuel the escape pod, time to activate it and get off this wreck.";
+    }
+
+    if (firstThing.equals("combination") && secondThing.equals("screen") && roomName.equals("hanger") && levelThree.getLevelRooms().get("hanger").getContents().containsKey("escape pod")) {
+      player.getInventory().remove("combination");
+      levelThree
+              .getLevelRooms()
+              .get("hanger")
+              .putDirection(Direction.NORTH, levelThree.getLevelRooms().get("escape pod"));
+      return "The escape pod whirs to life, and is ready for takeoff!";
     }
 
     return "That doesn't work here.";
@@ -223,7 +396,7 @@ public class Game {
   public String validateTalkCommand(String command) {
     String input;
     if (player.getCurrentRoom().getContents().isEmpty()) {
-      return "That's not a thing in this room that can talk to.";
+      return "This is an empty room...";
     }
     try {
       input = command.split(" ")[1];
@@ -252,7 +425,7 @@ public class Game {
         levelOne
                 .getLevelRooms()
                 .get("workshop")
-                .putContents(new RoomThingTool("keycard", "A brilliant yellow flake of plastic, looks important"));
+                .addContents(new RoomThingTool("screwdriver", "A universal screwdriver, this thing could open just about anything, as long as it was screwed shut at least."));
         levelOne
                 .getLevelRooms()
                 .get("hallway")
@@ -337,6 +510,10 @@ public class Game {
     }
   }
 
+  public String helpCommand() {
+    return Descriptions.HELP;
+  }
+
   public String validateCheatCommand(String command) {
     try {
       String input = command.split(" ")[1];
@@ -353,6 +530,10 @@ public class Game {
       switch (command.split(" ")[1]) {
         case "primus":
           return skipLevelOne();
+        case "doubletrouble":
+          return skipLevelTwo();
+        case "triplethreat":
+          return skipLevelThree();
         default:
           return "Cheat failed, ya cheater.";
       }
@@ -360,9 +541,49 @@ public class Game {
   }
 
   public String skipLevelOne() {
+    player.setCurrentRoom(levelOne.getEndingRoom());
+    return "You have skipped level one.";
+  }
+
+  public String skipLevelTwo() {
+    player.setCurrentRoom(levelTwo.getEndingRoom());
+    return "You have skipped level two.";
+  }
+
+  public String skipLevelThree() {
+    player.setCurrentRoom(levelThree.getEndingRoom());
+    return "You have skipped level three.";
+  }
+
+  public String skipLevelOneOld() {
     player.setCurrentRoom(levelOne.getLevelRooms().get("office"));
-    player.getInventory().put("keycard", new RoomThingTool("keycard", "A brilliant yellow flake of plastic, looks important"));
-    return "Level One Skipped, use keycard on grate to escape.";
+    player.getInventory().put("screwdriver", new RoomThingTool("screwdriver", "A brilliant yellow flake of plastic, looks important"));
+    return "Level One Skipped, use screwdriver on vent to escape.";
+  }
+
+  public String skipLevelTwoOld() {
+    player.setCurrentRoom(levelTwo.getLevelRooms().get("accessway"));
+    player.getInventory().put("keycard", new RoomThingTool("keycard", "An old but functional keycard."));
+    return "Level Two Skipped, use keycard on scanner to progress.";
+  }
+
+  public String skipLevelThreeOld() {
+    levelThree
+            .getLevelRooms()
+            .get("corridorOne")
+            .putDirection(Direction.NORTH, levelThree.getLevelRooms().get("hanger"));
+    levelThree
+            .getLevelRooms()
+            .get("hanger")
+            .putDirection(Direction.SOUTH, levelThree.getLevelRooms().get("corridorOne"));
+
+    player.setCurrentRoom(levelThree.getLevelRooms().get("hanger"));
+    player.getInventory().put("combination", new RoomThingTool("combination", "Seems to be a flight initialisation combination, for a personal escape pod."));
+    levelThree
+            .getLevelRooms()
+            .get("hanger")
+            .addContents(new RoomThingDecoration("escape pod", "A fully fuelled escape pod on the North wall."));
+    return "Level Three Skipped, use combination on screen to escape";
   }
 
 }

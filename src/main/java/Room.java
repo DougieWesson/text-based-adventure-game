@@ -101,15 +101,11 @@ public class Room {
     this.contents.put(thing.name.toLowerCase(), thing);
   }
 
-  public void putContents(RoomThing thing) {
-    this.contents.put(thing.name.toLowerCase(), thing);
-  }
-
   public String listContents() {
     if (contents.size() < 1) {
       return "There is nothing of note in this room";
     } else {
-      String contentsList = "you look around the room, you see the things below: \n";
+      String contentsList = "You look around the room, you see the things below: \n";
       contentsList += String.join(", ", contents.keySet());
       return contentsList;
     }

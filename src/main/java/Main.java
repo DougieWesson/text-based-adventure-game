@@ -11,7 +11,7 @@ public class Main {
     levelThree.getBoardWindow().hideBoard();
     game = new Game(new Player(levelOne.getStartingRoom(), levelOne), levelOne, levelTwo, levelThree);
     game.getCurrentLevel().getBoardWindow().getInputField().addKeyListener(new UserInput(game));
-    game.getCurrentLevel().getBoardWindow().getTextArea().append(BOOT_MESSAGE);
+    game.getCurrentLevel().getBoardWindow().getTextArea().append(Descriptions.BOOT_MESSAGE);
     Scanner scanner = new Scanner(System.in);
     String input;
     String output;
@@ -53,10 +53,10 @@ public class Main {
     workshop.putDirection(Direction.NORTH, hallway);
     office.putDirection(Direction.SOUTH, hallway);
 
-    hallway.putContents(new RoomThingCharacter("Jimbo", "A man who look like Stephen Merchant, tall and gaunt", "you're in the wrong room lad, go south and grab the key card for me would you, while you do that ill unlock this door to the EAST"));
-    hallway.putContents(new RoomThingTool("hammer", "A great big hammer, looks dangerous"));
-    hallway.putContents(new RoomThingDecoration("chandelier", "shiny"));
-    office.putContents(new RoomThingDecoration("grate", "it's a grate with a scanner"));
+    hallway.addContents(new RoomThingCharacter("Jimbo", "A service-bot, short and neat, but rather dusty. He's prone to loops apparently...", "Howdy there, lemme open up this here locker room for ya. By the way, I put that screwdriver back in the workshop, keep things nice and tidy."));
+    hallway.addContents(new RoomThingTool("hammer", "A great big hammer, looks dangerous"));
+    hallway.addContents(new RoomThingDecoration("light", "Shiny."));
+    office.addContents(new RoomThingDecoration("vent", "It's the vent you crawled through to get in here, usually covered with a metal cover."));
     Level levelOne = new Level(brig, vent, Descriptions.LEVEL_ONE_SUCCESS, LEVEL_ONE_WIDTH, LEVEL_ONE_HEIGHT);
 
     levelOne.putLevelRooms(brig);
@@ -92,16 +92,27 @@ public class Main {
     kitchen.putDirection(Direction.NORTH, accessWay);
 
     accessWay.putDirection(Direction.SOUTH, kitchen);
-    accessWay.putDirection(Direction.NORTH, storage);
-    accessWay.putDirection(Direction.EAST, stairway);
 
-    storage.putDirection(Direction.SOUTH, accessWay);
 
-    bunks.addContents(new RoomThingCharacter("Annie", "A little child, she's angry", "Grr I'm very angry for some reason, get killed my dude."));
+
+    hallwayTwo.addContents(new RoomThingDecoration("notices", "Lots of boring and old notices, although one of them does mention a misplaced keycard somewhere in storage..."));
+
+    lounge.addContents(new RoomThingDecoration("sofa", "Raggedy and broken, you're not sure how the person on it is able to sleep. It looks like someone's been scrounging around."));
+    lounge.addContents(new RoomThingCharacter("vagrant", "Unconscious and kinda smelly, waking them up would surely be a bad idea.", "zzz"));
+
+    bunks.addContents(new RoomThingCharacter("annie", "A little child, she's angry.", "Grr I'm very angry for some reason, get killed my dude. (You think she might just be really hungry)"));
+    bunks.addContents(new RoomThingDecoration("beds", "Bare beds baring bear-like beatniks, built badly."));
+
     kitchen.addContents(new RoomThingTool("knife", "A sharp knife, for cutting meat."));
-    kitchen.addContents(new RoomThingDecoration("passcode", "Storage passcode:7324 \n TOP SECRET"));
-    accessWay.addContents(new RoomThingDecoration("scanner", "A facial recognition scanner."));
-    storage.addContents(new RoomThingDecoration("nothing", "Still nothing..."));
+    kitchen.addContents(new RoomThingDecoration("fridge", "A giant metal box, cold on the inside and cold on the outside. There's " +
+            "barely enough food to last the rest of the ships scheduled journey and nothing else, although there does appear to be a code on the side though."));
+    kitchen.addContents(new RoomThingDecoration("heater", "It has just enough space for a regulation meal packet, or bagel if you can find one."));
+
+    accessWay.addContents(new RoomThingDecoration("scanner", "A keycard scanner. Now just to find a keycard..."));
+    accessWay.addContents(new RoomThingDecoration("keypad", "A passcode keypad, basic security but enough to keep prying eyes out."));
+
+    storage.addContents(new RoomThingDecoration("dust", "Definitely not sanitary, kind of impressive really."));
+    storage.addContents(new RoomThingDecoration("box", "This box seems slightly less dusty, and even has a lockbox in it."));
 
     Level levelTwo = new Level(hallwayTwo, stairway, "You descend down into the flight deck of the ship...", LEVEL_WIDTH, LEVEL_HEIGHT);
 
@@ -119,72 +130,75 @@ public class Main {
   private static Level initLevel3() {
     final int LEVEL_WIDTH = 5;
     final int LEVEL_HEIGHT = 6;
-    Room corridorOne = new Room("corridor", Descriptions.CORRIDOR_ONE, LEVEL_WIDTH, LEVEL_HEIGHT, 2, 1);
-    Room corridorTwo = new Room("corridor", Descriptions.CORRIDOR_TWO, LEVEL_WIDTH, LEVEL_HEIGHT);
+    Room corridorOne = new Room("corridorOne", Descriptions.CORRIDOR_ONE, LEVEL_WIDTH, LEVEL_HEIGHT, 2, 1);
+    Room corridorTwo = new Room("corridorTwo", Descriptions.CORRIDOR_TWO, LEVEL_WIDTH, LEVEL_HEIGHT);
+    Room corridorThree = new Room("corridorThree", Descriptions.CORRIDOR_TWO, LEVEL_WIDTH, LEVEL_HEIGHT);
     Room armory = new Room("armory", Descriptions.ARMOURY, LEVEL_WIDTH, LEVEL_HEIGHT);
     Room bathroom = new Room("bathroom", Descriptions.BATHROOM, LEVEL_WIDTH, LEVEL_HEIGHT);
     Room foyer = new Room("foyer", Descriptions.FOYER, LEVEL_WIDTH, LEVEL_HEIGHT);
     Room firstMateRoom = new Room("first mate's room", Descriptions.FIRST_MATE_ROOM, LEVEL_WIDTH, LEVEL_HEIGHT);
-    Room hanger = new Room("Hanger", Descriptions.HANGER, LEVEL_WIDTH, LEVEL_HEIGHT);
+    Room hanger = new Room("hanger", Descriptions.HANGER, LEVEL_WIDTH, LEVEL_HEIGHT);
     Room captainRoom = new Room("captain's room", Descriptions.CAPTAIN_ROOM, LEVEL_WIDTH, LEVEL_HEIGHT);
     Room fuelRoom = new Room("fuel room", Descriptions.FUEL_ROOM, LEVEL_WIDTH, LEVEL_HEIGHT);
     Room escapePod = new Room("escape pod", Descriptions.ESCAPE_POD, LEVEL_WIDTH, LEVEL_HEIGHT);
 
-    corridorOne.putDirection(Direction.NORTH, hanger);
     corridorOne.putDirection(Direction.SOUTH, corridorTwo);
+    corridorOne.putDirection(Direction.NORTH, hanger);
+
+    hanger.putDirection(Direction.SOUTH, corridorOne);
 
     corridorTwo.putDirection(Direction.NORTH, corridorOne);
-    corridorTwo.putDirection(Direction.SOUTH, fuelRoom);
-    corridorTwo.putDirection(Direction.EAST, armory);
+    corridorTwo.putDirection(Direction.EAST, corridorThree);
+    corridorTwo.putDirection(Direction.WEST, armory);
 
-    armory.putDirection(Direction.WEST, corridorTwo);
-    armory.putDirection(Direction.SOUTH, bathroom);
-    armory.putDirection(Direction.NORTH, foyer);
+    armory.putDirection(Direction.EAST, corridorTwo);
 
-    bathroom.putDirection(Direction.NORTH, armory);
+    corridorThree.putDirection(Direction.WEST, corridorTwo);
+    corridorThree.putDirection(Direction.SOUTH, bathroom);
+    corridorThree.putDirection(Direction.NORTH, foyer);
 
-    foyer.putDirection(Direction.SOUTH, armory);
-    foyer.putDirection(Direction.NORTH, captainRoom);
+    bathroom.putDirection(Direction.NORTH, corridorThree);
+
+    foyer.putDirection(Direction.SOUTH, corridorThree);
     foyer.putDirection(Direction.EAST, firstMateRoom);
 
     firstMateRoom.putDirection(Direction.WEST, foyer);
 
-    hanger.putDirection(Direction.SOUTH, corridorOne);
-    hanger.putDirection(Direction.NORTH, escapePod);
 
-    captainRoom.putDirection(Direction.SOUTH, foyer);
+    corridorTwo.addContents(new RoomThingDecoration("keypad", "At the entry to the fuel storage room, this terminal requires a passcode, and judging from several carvings from a previous attempt it is animal based."));
 
-    fuelRoom.putDirection(Direction.NORTH, corridorTwo);
+    foyer.addContents(new RoomThingDecoration("sofa", "A sofa that can actually be called a sofa, it's comfy and after a little poking around, you find a key down the side of one of the cushions."));
+    foyer.addContents(new RoomThingDecoration("table", "Made of a mysterious brown material, it looks to be far more expensive and decorative than more other tables."));
+    foyer.addContents(new RoomThingDecoration("carpet", "It appears to be some kind of fabric layered onto the floor, which seems both frivolous but also comfy."));
+    foyer.addContents(new RoomThingDecoration("padlock", "Seems to be a padlock keeping the door shut. You reckon the key can't be far."));
 
-    escapePod.putDirection(Direction.SOUTH, hanger);
+    captainRoom.addContents(new RoomThingDecoration("desk", "Old and covered in mess and notes."));
+    captainRoom.addContents(new RoomThingDecoration("notes", "The notes look innocuous, until you find one that reads 'use in emergency, escape pod combination'. Huh."));
 
-    corridorOne.addContents(new RoomThingDecoration("a passcode terminal", "on the entry to the hanger, this terminal requires a passcode, the buttons are few in number and primary colours"));
-    corridorTwo.addContents(new RoomThingDecoration("a passcode terminal", "on the entry to the fuel storage room, this terminal requires a passcode, and judging from several carvings from a previous attempt it is animal based."));
-    foyer.addContents(new RoomThingDecoration("a passcode terminal.", "a gold plated password terminal that requires your sausage like fingers to enter a passcode"));
-    captainRoom.addContents(new RoomThingCharacter("el capitan", "a fleshy beast of a man wearing only a silk scarf around his bulbous neck, a thickly feathered hat, and a chunky leather belt with a jewel encrusted seahorse buckle", "you tweak his nipples, you're disgusting. this man is dead."));
-    captainRoom.addContents(new RoomThingDecoration("first erotic painting", "titled, 'the mighty shetland pony'"));
-    captainRoom.addContents(new RoomThingDecoration("second erotic painting", "titled, 'Mr Tug Boat'"));
-    captainRoom.addContents(new RoomThingDecoration("third erotic painting", "titled, the lonesome plumber"));
-    captainRoom.addContents(new RoomThingDecoration("belt", "the captain's seahorse belt, the jewels that encrust it are worth more than your life but is it worth having to touch it.."));
-    captainRoom.addContents(new RoomThingDecoration( "hat", "the captain's hat, it's decorated with some form of giant parrot feathers"));
-    //passcode for room found in journal in hanger
-    firstMateRoom.addContents(new RoomThingDecoration("stuffed unicorns", "it seems whoever lived in this room had some form of obsessive organisational disorder as all the unicorns are organised from blue to red"));
-    firstMateRoom.addContents(new RoomThingDecoration( "the sticky unicorn", "I wouldn't touch this one, again."));
-    bathroom.addContents(new RoomThingDecoration("cubicle one", "it's locked, and judging by the cacophony of brutal smells, best left that way"));
-    bathroom.addContents(new RoomThingDecoration( "cubicle two", "opening the door reveals a fetid mess gently drifting around the toilet bowl, a finger pops out of the water as you watch. a number is scrawled on the wall ensuring if you call Andy on 77892 you'll receive a 'good time'"));
-    fuelRoom.addContents(new RoomThingTool("a large fuel canister", "its filled with fuel, take a lumbering guess what it's for..."));
-    //password for fuel room is pony, seahorse, parrot
-    hanger.addContents(new RoomThingDecoration("Escape Pods", "These look like they could get you out of here..."));
-    hanger.addContents(new RoomThingDecoration("Ornaments", "Rustic old fashioned balls with alarmingly large thrusters line the northern wall"));
-    hanger.addContents(new RoomThingDecoration(  "Table", "A table covered with papers"));
-    hanger.addContents(new RoomThingTool("a leather bound captain's journal", "it seems to be mainly erotic fan fiction, but also contains the numbers 554641 in massive letters on the first page"));
-    //password for hanger is blue yellow green red
-    escapePod.addContents(new RoomThingDecoration("a fuel port", "this fuel port could be useful, it's for fuel."));
+    firstMateRoom.addContents(new RoomThingDecoration("unicorn", "It seems whoever lived in this room had some form of obsession with unicorns as there are far, far more than the normal 17 expected in a room."));
+    firstMateRoom.addContents(new RoomThingDecoration("desk", "A relatively neat desk, you find a passcode with 'Fuel room' written on it. How convenient."));
+    firstMateRoom.addContents(new RoomThingDecoration("bed", "A bed with actual pillows and comfort, you wish you had time for a little nap."));
+    firstMateRoom.addContents(new RoomThingDecoration("poster", "A poster of a majestic unicorn, a perfectly normal thing to be on a futuristic spaceship"));
+    firstMateRoom.addContents(new RoomThingDecoration("ashpile", "A pile of ash, in a suspiciously human shaped arrangement... The cleaners mustn't have gotten to here in a while."));
 
-    Level levelThree = new Level(corridorOne, escapePod, "you feel a sense of elation as the pod finally blasts off hurtling you into the stars where due to low oxygen, low fuel, and more optimism than sense you will freeze or suffocate to death within minutes, congratulations on your escape.", LEVEL_WIDTH, LEVEL_HEIGHT);
+    bathroom.addContents(new RoomThingDecoration("cubicles", "Unoccupied, but entirely unuseful, mostly because all the toilets appear to be broken. The does appear to be some cleaner in one of them though."));
+
+    armory.addContents(new RoomThingDecoration("munitions", "These are really, really old and volatile warheads, just looking at them seems dangerous..."));
+
+    fuelRoom.addContents(new RoomThingTool("canister", "its filled with fuel, but heavy enough that you can only take one at a time."));
+
+    hanger.addContents(new RoomThingDecoration("pod", "This looks like they could get you out of here..."));
+    hanger.addContents(new RoomThingDecoration(  "table", "A table covered with papers"));
+    hanger.addContents(new RoomThingDecoration("papers", "You find nothing of note in these archaic and garbled papers."));
+    hanger.addContents(new RoomThingDecoration("puddle", "A puddle of grease, looks like there's something in it but it's gross and maybe corrosive?"));
+    hanger.addContents(new RoomThingDecoration(  "screen", "A flight status screen, shows the viability of flight and fuel status."));
+
+
+    Level levelThree = new Level(corridorOne, escapePod, "You feel a sense of elation as the pod finally blasts off, hurtling you down to the planets surface. Congratulations on your escape.", LEVEL_WIDTH, LEVEL_HEIGHT);
 
     levelThree.putLevelRooms(corridorOne);
     levelThree.putLevelRooms(corridorTwo);
+    levelThree.putLevelRooms(corridorThree);
     levelThree.putLevelRooms(armory);
     levelThree.putLevelRooms(bathroom);
     levelThree.putLevelRooms(foyer);
@@ -196,10 +210,5 @@ public class Main {
 
     return levelThree;
   }
-
-  private static final String BOOT_MESSAGE = "Welcome to (title pending)! I hope you enjoy the game, and type 'help' if you need any guidance with the commands. -DW" + "\n you awaken in a tiny gloomy room. you are sat on a filthy bed covered with " +
-          "a coarse blanket, no pillow, and a NORMAL bucket is on the opposite side " +
-          "of the room. The thick iron door on the east wall has been left ajar and you briefly consider giving them a scathing " +
-          "review on trip advisor, but settle on escaping this dingy vessel instead.";
 
 }

@@ -9,7 +9,7 @@ public class RoomThingTool extends RoomThing {
   @Override
   public String takeThing(HashMap<String, RoomThingTool> inventory, HashMap<String, RoomThing> contents) {
     inventory.put(this.getName(), this);
-    contents.remove(this);
+    contents.remove(this.name);
     return "You pick up the " + this.name;
   }
 
