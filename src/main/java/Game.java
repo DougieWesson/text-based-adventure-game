@@ -195,11 +195,33 @@ public class Game {
                 .addContents(new RoomThingTool("packet", "A frozen meal packet, inedible in it's current state."));
       }
 
+      if(foundThing.getName().equals("box")) {
+        levelTwo
+                .getLevelRooms()
+                .get("storage")
+                .addContents(new RoomThingTool("lockbox", "A small lockbox, still shiny."));
+
+      }
+
       if (foundThing.getName().equals("sofa") && player.getCurrentRoom().getName().equals("foyer")) {
         levelThree
                 .getLevelRooms()
                 .get("foyer")
                 .addContents(new RoomThingTool("key", "A decorative and sleek key."));
+      }
+
+      if (foundThing.getName().equals("desk") && player.getCurrentRoom().getName().equals("first mate's room")) {
+        levelThree
+                .getLevelRooms()
+                .get("first mate's room")
+                .addContents(new RoomThingTool("passcode", "The passcode for the fuel room, apparently."));
+      }
+
+      if(foundThing.getName().equals("notes") && player.getCurrentRoom().getName().equals("captain's room")) {
+        levelThree
+                .getLevelRooms()
+                .get("captain's room")
+                .addContents(new RoomThingTool("combination", "Seems to be a flight initialisation combination, for a personal escape pod."));
       }
 
       return foundThing.inspect();
@@ -266,6 +288,7 @@ public class Game {
     }
 
     if (firstThing.equals("code") && secondThing.equals("keypad") && roomName.equals("accessway")) {
+      player.getInventory().remove("code");
       levelTwo
               .getLevelRooms()
               .get("accessway")
@@ -286,40 +309,44 @@ public class Game {
       return "The lock on the lockbox clicks open, revealing an old but valid keycard.";
     }
 
-
+    if (firstThing.equals("keycard") && secondThing.equals("scanner") && roomName.equals("accessway")) {
+      player.getInventory().remove("keycard");
+      levelTwo
+              .getLevelRooms()
+              .get("accessway")
+              .putDirection(Direction.EAST, levelTwo.getLevelRooms().get("stairway"));
+      return "You open the stairway down to the flight deck, although the faulty scanner eats the keycard.";
+    }
 
     if (firstThing.equals("key") && secondThing.equals("padlock") && roomName.equals("foyer")) {
       player.getInventory().remove("key");
       levelThree
               .getLevelRooms()
               .get("foyer")
-              .putDirection(Direction.NORTH, levelThree.getLevelRooms().get("captainRoom"));
+              .putDirection(Direction.NORTH, levelThree.getLevelRooms().get("captain's room"));
       levelThree
               .getLevelRooms()
-              .get("captainRoom")
+              .get("captain's room")
               .putDirection(Direction.SOUTH, levelThree.getLevelRooms().get("foyer"));
       levelThree
               .getLevelRooms()
               .get("foyer")
               .getContents()
               .remove("padlock");
+      return "You open the padlock, unlocking the door to the North.";
     }
 
     if (firstThing.equals("passcode") && secondThing.equals("keypad") && roomName.equals("corridortwo")) {
       player.getInventory().remove("passcode");
       levelThree
               .getLevelRooms()
-              .get("corridortwo")
-              .putDirection(Direction.NORTH, levelThree.getLevelRooms().get("fuelRoom"));
+              .get("corridorTwo")
+              .putDirection(Direction.SOUTH, levelThree.getLevelRooms().get("fuel room"));
       levelThree
               .getLevelRooms()
-              .get("fuelRoom")
-              .putDirection(Direction.NORTH, levelThree.getLevelRooms().get("corridortwo"));
-      levelThree
-              .getLevelRooms()
-              .get("foyer")
-              .getContents()
-              .remove("padlock");
+              .get("fuel room")
+              .putDirection(Direction.NORTH, levelThree.getLevelRooms().get("corridorTwo"));
+      return "You open the door to the South.";
     }
 
     if (firstThing.equals("canister") && secondThing.equals("pod") && roomName.equals("hanger")){
@@ -355,20 +382,12 @@ public class Game {
     }
 
     if (firstThing.equals("combination") && secondThing.equals("screen") && roomName.equals("hanger") && levelThree.getLevelRooms().get("hanger").getContents().containsKey("escape pod")) {
+      player.getInventory().remove("combination");
       levelThree
               .getLevelRooms()
               .get("hanger")
               .putDirection(Direction.NORTH, levelThree.getLevelRooms().get("escape pod"));
-      return "The Escape pod whirs to life, and is ready for takeoff";
-    }
-
-
-    if (firstThing.equals("keycard") && secondThing.equals("scanner") && roomName.equals("accessway")) {
-      levelTwo
-              .getLevelRooms()
-              .get("accessway")
-              .putDirection(Direction.EAST, levelTwo.getLevelRooms().get("stairway"));
-      return "You open the stairway down to the flight deck, although the faulty scanner eats the keycard.";
+      return "The escape pod whirs to life, and is ready for takeoff!";
     }
 
     return "That doesn't work here.";
@@ -522,18 +541,33 @@ public class Game {
   }
 
   public String skipLevelOne() {
+    player.setCurrentRoom(levelOne.getEndingRoom());
+    return "You have skipped level one.";
+  }
+
+  public String skipLevelTwo() {
+    player.setCurrentRoom(levelTwo.getEndingRoom());
+    return "You have skipped level two.";
+  }
+
+  public String skipLevelThree() {
+    player.setCurrentRoom(levelThree.getEndingRoom());
+    return "You have skipped level three.";
+  }
+
+  public String skipLevelOneOld() {
     player.setCurrentRoom(levelOne.getLevelRooms().get("office"));
     player.getInventory().put("screwdriver", new RoomThingTool("screwdriver", "A brilliant yellow flake of plastic, looks important"));
     return "Level One Skipped, use screwdriver on vent to escape.";
   }
 
-  public String skipLevelTwo() {
+  public String skipLevelTwoOld() {
     player.setCurrentRoom(levelTwo.getLevelRooms().get("accessway"));
     player.getInventory().put("keycard", new RoomThingTool("keycard", "An old but functional keycard."));
     return "Level Two Skipped, use keycard on scanner to progress.";
   }
 
-  public String skipLevelThree() {
+  public String skipLevelThreeOld() {
     levelThree
             .getLevelRooms()
             .get("corridorOne")

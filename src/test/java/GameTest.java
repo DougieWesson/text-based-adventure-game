@@ -182,7 +182,7 @@ class GameTest {
     when(mockedBoardWindow.getTextArea()).thenReturn(mockedTextArea);
     when(mockedRoom.listContents()).thenReturn("mock room contents");
     String actual = gameUnderTest.runCommand(mockedCommand);
-    String expected = "mock room contents";
+    String expected = "You are in the null. mock room contents";
     assertEquals(expected, actual);
   }
   @Test
@@ -196,6 +196,7 @@ class GameTest {
     HashMap<String, RoomThing> mockedContents = new HashMap<>();
     RoomThingTool mockedRoomThingTool = mock(RoomThingTool.class);
     mockedContents.put("screwdriver", mockedRoomThingTool);
+    when(mockedRoomThingTool.getName()).thenReturn("screwdriver");
     when(mockedRoom.getContents()).thenReturn(mockedContents);
     when(mockedRoomThingTool.inspect()).thenReturn("screwdriver description");
     String actual = gameUnderTest.runCommand(mockedCommand);
@@ -216,7 +217,7 @@ class GameTest {
     when(mockedRoom.getContents()).thenReturn(mockedContents);
     when(mockedRoomThingTool.inspect()).thenReturn("screwdriver description");
     String actual = gameUnderTest.runCommand(mockedCommand);
-    String expected = "What did you want to inspect?";
+    String expected = "That's not something you can inspect.";
     assertEquals(expected, actual);
   }
 
@@ -512,17 +513,17 @@ class GameTest {
 
   @Test
   void runCommand_UseCommand_Correct() {
-    String mockedCommand = "use keycard grate";
+    String mockedCommand = "use screwdriver vent";
     RoomThingTool mockedRoomThingTool = mock(RoomThingTool.class);
     HashMap<String, RoomThingTool> mockedInventory = new HashMap<>();
-    mockedInventory.put("keycard", mockedRoomThingTool);
+    mockedInventory.put("screwdriver", mockedRoomThingTool);
     when(mockedPlayer.getInventory()).thenReturn(mockedInventory);
-    when(mockedRoomThingTool.getName()).thenReturn("keycard");
+    when(mockedRoomThingTool.getName()).thenReturn("screwdriver");
     RoomThingDecoration mockedRoomThingDecoration = mock(RoomThingDecoration.class);
     HashMap<String, RoomThing> mockedContents = new HashMap<>();
-    mockedContents.put("grate", mockedRoomThingDecoration);
+    mockedContents.put("vent", mockedRoomThingDecoration);
     when(mockedRoom.getContents()).thenReturn(mockedContents);
-    when(mockedRoomThingDecoration.getName()).thenReturn("grate");
+    when(mockedRoomThingDecoration.getName()).thenReturn("vent");
     when(mockedRoom.getName()).thenReturn("office");
     when(mockedPlayer.getCurrentRoom()).thenReturn(mockedRoom);
     HashMap<String, Room> mockedLevelRooms = new HashMap<>();
@@ -535,7 +536,7 @@ class GameTest {
     mockedLevelRooms.put("office", mockedRoom);
     mockedLevelRooms.put("vent", mockedVent);
     String actual = gameUnderTest.runCommand(mockedCommand);
-    String expected = "You open the grate, somehow...";
+    String expected = "You unscrew the cover of the vent, making just enough space for you to crawl through.";
     assertEquals(expected, actual);
   }
 
@@ -657,7 +658,7 @@ class GameTest {
     when(mockedBoardWindow.getTextArea()).thenReturn(mockedTextArea);
     mockedLevelRooms.put("office", mockedRoom);
     String actual = gameUnderTest.runCommand(mockedCommand);
-    String expected = "Level One Skipped, use keycard on grate to escape.";
+    String expected = "You have skipped level one.";
     assertEquals(expected, actual);
   }
 
