@@ -180,7 +180,8 @@ public class Game {
     }
     String nameOfThing= command.split(" ")[1];
     if (nameOfThing.equals("room")) {
-      return "You are in the " + player.getCurrentRoom().getName() + ". " + player.getCurrentRoom().listContents();
+      return "You are in the " + player.getCurrentRoom().getName() + ". " + player.getCurrentRoom().listContents() +
+              "\n you can go: " + player.getCurrentRoom().getDirections().keySet();
     } else {
       RoomThing foundThing = player.getCurrentRoom().getContents().get(nameOfThing);
 
