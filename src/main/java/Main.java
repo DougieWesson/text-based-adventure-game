@@ -35,9 +35,9 @@ public class Main {
   }
 
   private static Level initLevel1() {
-    final int LEVEL_ONE_WIDTH = 5;
-    final int LEVEL_ONE_HEIGHT = 5;
-    Room brig = new Room("brig", Descriptions.BRIG, LEVEL_ONE_WIDTH, LEVEL_ONE_HEIGHT, 2, 1);
+    final int LEVEL_ONE_WIDTH = 7;
+    final int LEVEL_ONE_HEIGHT = 6;
+    Room brig = new Room("brig", Descriptions.BRIG, LEVEL_ONE_WIDTH, LEVEL_ONE_HEIGHT, 2, 2);
     Room hallway = new Room("hallway", Descriptions.HALLWAY, LEVEL_ONE_WIDTH, LEVEL_ONE_HEIGHT);
     Room workshop = new Room("workshop", Descriptions.WORKSHOP, LEVEL_ONE_WIDTH, LEVEL_ONE_HEIGHT);
     Room lockerRoom = new Room("lockerRoom", Descriptions.LOCKER_ROOM, LEVEL_ONE_WIDTH, LEVEL_ONE_HEIGHT);
@@ -70,9 +70,9 @@ public class Main {
   }
 
   private static Level initLevel2() {
-    final int LEVEL_WIDTH = 5;
-    final int LEVEL_HEIGHT = 5;
-    Room hallwayTwo = new Room("hallwayTwo", Descriptions.HALLWAY_TWO, LEVEL_WIDTH, LEVEL_HEIGHT, 3, 2);
+    final int LEVEL_WIDTH = 7;
+    final int LEVEL_HEIGHT = 6;
+    Room hallwayTwo = new Room("hallwayTwo", Descriptions.HALLWAY_TWO, LEVEL_WIDTH, LEVEL_HEIGHT, 3, 3);
     Room lounge = new Room("lounge", Descriptions.LOUNGE, LEVEL_WIDTH, LEVEL_HEIGHT);
     Room bunks = new Room("bunks", Descriptions.BUNKS, LEVEL_WIDTH, LEVEL_HEIGHT);
     Room kitchen = new Room("kitchen", Descriptions.KITCHEN, LEVEL_WIDTH, LEVEL_HEIGHT);
@@ -128,9 +128,9 @@ public class Main {
   }
 
   private static Level initLevel3() {
-    final int LEVEL_WIDTH = 5;
+    final int LEVEL_WIDTH = 7;
     final int LEVEL_HEIGHT = 6;
-    Room corridorOne = new Room("corridorOne", Descriptions.CORRIDOR_ONE, LEVEL_WIDTH, LEVEL_HEIGHT, 2, 1);
+    Room corridorOne = new Room("corridorOne", Descriptions.CORRIDOR_ONE, LEVEL_WIDTH, LEVEL_HEIGHT, 2, 2);
     Room corridorTwo = new Room("corridorTwo", Descriptions.CORRIDOR_TWO, LEVEL_WIDTH, LEVEL_HEIGHT);
     Room corridorThree = new Room("corridorThree", Descriptions.CORRIDOR_TWO, LEVEL_WIDTH, LEVEL_HEIGHT);
     Room armory = new Room("armory", Descriptions.ARMOURY, LEVEL_WIDTH, LEVEL_HEIGHT);
