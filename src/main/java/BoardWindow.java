@@ -28,7 +28,7 @@ public class BoardWindow extends Canvas {
 
   private void initBoardWindow() {
     this.frame = new JFrame(this.title);
-    this.frame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+    this.frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     this.setSize(board.getColumnCount() * cellSize, board.getRowCount() * cellSize);
     this.textArea = new JTextArea();
     this.inputField = new JTextField();

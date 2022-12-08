@@ -4,29 +4,10 @@ public class Main {
   public static Game game;
 
   public static void main(String[] args) {
-    game = startGame();
-    Scanner scanner = new Scanner(System.in);
-    String input;
-    String output;
-    do {
-      System.out.print("> ");
-      input = scanner.nextLine().toLowerCase();
-      if (!game.hasFinishedGame()) {
-        output = game.runCommand(input);
-        System.out.println(output);
-      }
-      if (game.hasFinishedGame() && !input.equals("quit")) {
-        if (input.equals("restart")) {
-          game = startGame();
-        } else {
-          System.out.println("Do you want to restart or quit?");
-        }
-      }
-    } while (!"quit".equals(input));
-    System.exit(0);
+    startGame();
   }
 
-  public static Game startGame() {
+  public static void startGame() {
     Level levelOne = initLevel1();
     Level levelTwo = initLevel2();
     levelTwo.getBoardWindow().hideBoard();
@@ -35,7 +16,6 @@ public class Main {
     game = new Game(new Player(levelOne.getStartingRoom(), levelOne), levelOne, levelTwo, levelThree);
     game.getCurrentLevel().getBoardWindow().getInputField().addKeyListener(new UserInput(game));
     game.getCurrentLevel().getBoardWindow().getTextArea().append(Descriptions.BOOT_MESSAGE);
-    return game;
   }
 
   private static Level initLevel1() {
