@@ -1,6 +1,10 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.text.DefaultCaret;
 import java.awt.*;
+import java.awt.image.ImageObserver;
+import java.io.File;
+import java.io.IOException;
 
 public class BoardWindow extends Canvas {
 
@@ -60,6 +64,14 @@ public class BoardWindow extends Canvas {
     g.fillRect(column * cellSize, row * cellSize, cellSize, cellSize);
   }
 
+  private void drawCurrentCell(int row, int column, Color color, Graphics g) {
+    g.setColor(color);
+    g.fillRect(column * cellSize, row * cellSize, cellSize, cellSize);
+    Toolkit toolkit = Toolkit.getDefaultToolkit();
+    Image playerIcon = toolkit.getImage("resources/player-icon.png");
+    g.drawImage(playerIcon, column*cellSize, row*cellSize, this);
+  }
+
   @Override
   public void paint(Graphics g) {
     super.paint(g);
@@ -71,7 +83,7 @@ public class BoardWindow extends Canvas {
             drawCell(i, j, new Color(0x413F42), g);
             break;
           case CURRENT_ROOM:
-            drawCell(i, j, new Color(0x7F8487), g);
+              drawCurrentCell(i, j, new Color(0x7F8487), g);
             break;
           case START:
             drawCell(i, j, new Color(0xCAF0F8), g);
