@@ -3,9 +3,9 @@ import java.util.HashMap;
 public class Player {
 
   public static final String WRONG_WAY_MESSAGE = "you slam into a wall, physically you're fine, but emotionally you may never recover.";
+  private final HashMap<String, Tool> inventory;
   private Room currentRoom;
   private Level level;
-  private final HashMap<String, RoomThingTool> inventory;
 
   public Player(Room currentRoom, Level level) {
     this.inventory = new HashMap<>();
@@ -48,7 +48,7 @@ public class Player {
     return currentRoom;
   }
 
-  public HashMap<String, RoomThingTool> getInventory() {
+  public HashMap<String, Tool> getInventory() {
     return inventory;
   }
 }

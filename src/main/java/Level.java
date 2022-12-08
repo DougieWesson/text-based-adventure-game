@@ -9,14 +9,14 @@ public class Level {
     private final BoardWindow boardWindow;
     private final HashMap<String, Room> levelRooms;
 
-    public Level(Room startingRoom, Room endingRoom, String successMessage, int width, int height) {
+    public Level(Room startingRoom, Room endingRoom, String successMessage) {
         this.startingRoom = startingRoom;
         this.endingRoom = endingRoom;
         this.successMessage = successMessage;
         this.levelRooms = new HashMap<>();
         levelRooms.put(startingRoom.getName(), startingRoom);
         levelRooms.put(endingRoom.getName(), endingRoom);
-        Board board = new Board(height, width);
+        Board board = new Board(Descriptions.MAP_SIZE.get("height"), Descriptions.MAP_SIZE.get("width"));
         this.boardWindow = new BoardWindow(board, "Area Map", CELL_SIZE);
     }
 

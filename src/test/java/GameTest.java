@@ -1,8 +1,9 @@
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 
 import javax.swing.*;
-import java.awt.*;
 import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -172,6 +173,7 @@ class GameTest {
     String expected = "What did you want to inspect?";
     assertEquals(expected, actual);
   }
+
   @Test
   void runCommand_Inspect_Room() {
     String mockedCommand = "inspect room";
@@ -182,9 +184,10 @@ class GameTest {
     when(mockedBoardWindow.getTextArea()).thenReturn(mockedTextArea);
     when(mockedRoom.listContents()).thenReturn("mock room contents");
     String actual = gameUnderTest.runCommand(mockedCommand);
-    String expected = "You are in the null. mock room contents";
+    String expected = "You are in the null. mock room contents\n You can go: []";
     assertEquals(expected, actual);
   }
+
   @Test
   void runCommand_Inspect_RoomThing_Correct() {
     String mockedCommand = "inspect screwdriver";
@@ -194,15 +197,16 @@ class GameTest {
     when(mockedLevelOne.getBoardWindow()).thenReturn(mockedBoardWindow);
     when(mockedBoardWindow.getTextArea()).thenReturn(mockedTextArea);
     HashMap<String, RoomThing> mockedContents = new HashMap<>();
-    RoomThingTool mockedRoomThingTool = mock(RoomThingTool.class);
-    mockedContents.put("screwdriver", mockedRoomThingTool);
-    when(mockedRoomThingTool.getName()).thenReturn("screwdriver");
+    Tool mockedTool = mock(Tool.class);
+    mockedContents.put("screwdriver", mockedTool);
+    when(mockedTool.getName()).thenReturn("screwdriver");
     when(mockedRoom.getContents()).thenReturn(mockedContents);
-    when(mockedRoomThingTool.inspect()).thenReturn("screwdriver description");
+    when(mockedTool.inspect()).thenReturn("screwdriver description");
     String actual = gameUnderTest.runCommand(mockedCommand);
     String expected = "screwdriver description";
     assertEquals(expected, actual);
   }
+
   @Test
   void runCommand_Inspect_RoomThing_Wrong() {
     String mockedCommand = "inspect screwball";
@@ -212,10 +216,10 @@ class GameTest {
     when(mockedLevelOne.getBoardWindow()).thenReturn(mockedBoardWindow);
     when(mockedBoardWindow.getTextArea()).thenReturn(mockedTextArea);
     HashMap<String, RoomThing> mockedContents = new HashMap<>();
-    RoomThingTool mockedRoomThingTool = mock(RoomThingTool.class);
-    mockedContents.put("screwdriver", mockedRoomThingTool);
+    Tool mockedTool = mock(Tool.class);
+    mockedContents.put("screwdriver", mockedTool);
     when(mockedRoom.getContents()).thenReturn(mockedContents);
-    when(mockedRoomThingTool.inspect()).thenReturn("screwdriver description");
+    when(mockedTool.inspect()).thenReturn("screwdriver description");
     String actual = gameUnderTest.runCommand(mockedCommand);
     String expected = "That's not something you can inspect.";
     assertEquals(expected, actual);
@@ -231,15 +235,16 @@ class GameTest {
     when(mockedLevelOne.getBoardWindow()).thenReturn(mockedBoardWindow);
     when(mockedBoardWindow.getTextArea()).thenReturn(mockedTextArea);
     HashMap<String, RoomThing> mockedContents = new HashMap<>();
-    RoomThingTool mockedRoomThingTool = mock(RoomThingTool.class);
-    mockedContents.put("screwdriver", mockedRoomThingTool);
+    Tool mockedTool = mock(Tool.class);
+    mockedContents.put("screwdriver", mockedTool);
     when(mockedRoom.getContents()).thenReturn(mockedContents);
-    when(mockedRoomThingTool.getName()).thenReturn("screwdriver");
+    when(mockedTool.getName()).thenReturn("screwdriver");
     when(mockedPlayer.getCurrentRoom()).thenReturn(mockedRoom);
     String actual = gameUnderTest.runCommand(mockedCommand);
     String expected = "Who did you want to talk to?";
     assertEquals(expected, actual);
   }
+
   @Test
   void runCommand_Talk_EmptyRoom() {
     String mockedCommand = "talk screwdriver";
@@ -254,6 +259,7 @@ class GameTest {
     String expected = "This is an empty room...";
     assertEquals(expected, actual);
   }
+
   @Test
   void runCommand_Talk_WrongThing() {
     String mockedCommand = "talk hammer";
@@ -262,41 +268,47 @@ class GameTest {
     when(mockedLevelOne.getBoardWindow()).thenReturn(mockedBoardWindow);
     when(mockedBoardWindow.getTextArea()).thenReturn(mockedTextArea);
     HashMap<String, RoomThing> mockedContents = new HashMap<>();
-    RoomThingTool mockedRoomThingTool = mock(RoomThingTool.class);
-    mockedContents.put("screwdriver", mockedRoomThingTool);
+    Tool mockedTool = mock(Tool.class);
+    mockedContents.put("screwdriver", mockedTool);
     when(mockedRoom.getContents()).thenReturn(mockedContents);
-    when(mockedRoomThingTool.getName()).thenReturn("screwdriver");
+    when(mockedTool.getName()).thenReturn("screwdriver");
     when(mockedPlayer.getCurrentRoom()).thenReturn(mockedRoom);
     String actual = gameUnderTest.runCommand(mockedCommand);
     String expected = "That's not something in this room";
     assertEquals(expected, actual);
   }
+
   @Test
   void runCommand_Talk_Correct() {
-    String mockedCommand = "talk screwdriver";
+    String mockedCommand = "talk jimmie";
     BoardWindow mockedBoardWindow = mock(BoardWindow.class);
     JTextArea mockedTextArea = mock(JTextArea.class);
+    HashMap<String, RoomThing> mockedContents = new HashMap<>();
+    Character mockedRoomThingCharacter = mock(Character.class);
+    mockedContents.put("jimmie", mockedRoomThingCharacter);
+
     when(mockedLevelOne.getBoardWindow()).thenReturn(mockedBoardWindow);
     when(mockedBoardWindow.getTextArea()).thenReturn(mockedTextArea);
-    HashMap<String, RoomThing> mockedContents = new HashMap<>();
-    RoomThingTool mockedRoomThingTool = mock(RoomThingTool.class);
-    mockedContents.put("screwdriver", mockedRoomThingTool);
     when(mockedRoom.getContents()).thenReturn(mockedContents);
-    when(mockedRoomThingTool.getName()).thenReturn("screwdriver");
     when(mockedPlayer.getCurrentRoom()).thenReturn(mockedRoom);
-    when(mockedRoomThingTool.talkTo()).thenReturn("screwdriver speech");
+    when(mockedRoomThingCharacter.getName()).thenReturn("jimmie");
+    when(mockedRoomThingCharacter.talkTo()).thenReturn("jimmie speech");
+    MockedStatic<SpeakableChecker> mockedSpeakableChecker = Mockito.mockStatic(SpeakableChecker.class);
+    mockedSpeakableChecker.when(() -> SpeakableChecker.isSpeakable(mockedRoomThingCharacter)).thenReturn(true);
+
+
     String actual = gameUnderTest.runCommand(mockedCommand);
-    String expected = "screwdriver speech";
+    String expected = "jimmie speech";
+
     assertEquals(expected, actual);
   }
-
 
 
   //Check Inventory Command
   @Test
   void runCommand_CheckEmptyInventory() {
     String mockedCommand = "check inventory";
-    HashMap<String, RoomThingTool> mockedInventory = mock(HashMap.class);
+    HashMap<String, Tool> mockedInventory = mock(HashMap.class);
     when(mockedPlayer.getInventory()).thenReturn(mockedInventory);
     when(mockedInventory.isEmpty()).thenReturn(true);
     when(mockedPlayer.getCurrentRoom()).thenReturn(mockedRoom);
@@ -312,7 +324,7 @@ class GameTest {
   @Test
   void runCommand_CheckNullCommand() {
     String mockedCommand = "check";
-    HashMap<String, RoomThingTool> mockedInventory = mock(HashMap.class);
+    HashMap<String, Tool> mockedInventory = mock(HashMap.class);
     when(mockedPlayer.getInventory()).thenReturn(mockedInventory);
     when(mockedInventory.isEmpty()).thenReturn(true);
     when(mockedPlayer.getCurrentRoom()).thenReturn(mockedRoom);
@@ -328,9 +340,9 @@ class GameTest {
   @Test
   void runCommand_CheckInventory() {
     String mockedCommand = "check inventory";
-    RoomThingTool mockedRoomThingTool = mock(RoomThingTool.class);
-    HashMap<String, RoomThingTool> mockedInventory = new HashMap<>();
-    mockedInventory.put("mockedRoomThingToolName", mockedRoomThingTool);
+    Tool mockedTool = mock(Tool.class);
+    HashMap<String, Tool> mockedInventory = new HashMap<>();
+    mockedInventory.put("mockedRoomThingToolName", mockedTool);
     when(mockedPlayer.getInventory()).thenReturn(mockedInventory);
     when(mockedPlayer.getCurrentRoom()).thenReturn(mockedRoom);
     BoardWindow mockedBoardWindow = mock(BoardWindow.class);
@@ -347,13 +359,13 @@ class GameTest {
   @Test
   void runCommand_TakeItem() {
     String mockedCommand = "take screwdriver";
-    RoomThingTool mockedRoomThingTool = mock(RoomThingTool.class);
+    Tool mockedTool = mock(Tool.class);
     HashMap<String, RoomThing> mockedContents = new HashMap<>();
-    HashMap<String, RoomThingTool> mockedInventory = new HashMap<>();
-    mockedContents.put("screwdriver", mockedRoomThingTool);
+    HashMap<String, Tool> mockedInventory = new HashMap<>();
+    mockedContents.put("screwdriver", mockedTool);
     when(mockedRoom.getContents()).thenReturn(mockedContents);
-    when(mockedRoomThingTool.getName()).thenReturn("screwdriver");
-    when(mockedRoomThingTool.takeThing(mockedInventory, mockedContents)).thenReturn("You pick up the screwdriver");
+    when(mockedTool.getName()).thenReturn("screwdriver");
+    when(mockedTool.takeThing(mockedInventory, mockedContents)).thenReturn("You pick up the screwdriver");
     when(mockedPlayer.getCurrentRoom()).thenReturn(mockedRoom);
     when(mockedPlayer.getInventory()).thenReturn(mockedInventory);
     BoardWindow mockedBoardWindow = mock(BoardWindow.class);
@@ -368,13 +380,13 @@ class GameTest {
   @Test
   void runCommand_TakeNullCommand() {
     String mockedCommand = "take";
-    RoomThingTool mockedRoomThingTool = mock(RoomThingTool.class);
-    HashMap<String, RoomThingTool> mockedInventory = new HashMap<>();
+    Tool mockedTool = mock(Tool.class);
+    HashMap<String, Tool> mockedInventory = new HashMap<>();
     HashMap<String, RoomThing> mockedContents = new HashMap<>();
-    mockedContents.put("mockedRoomThingTool", mockedRoomThingTool);
+    mockedContents.put("mockedRoomThingTool", mockedTool);
     when(mockedRoom.getContents()).thenReturn(mockedContents);
-    when(mockedRoomThingTool.getName()).thenReturn("screwdriver");
-    when(mockedRoomThingTool.takeThing(mockedInventory, mockedContents)).thenReturn("You pick up the screwdriver");
+    when(mockedTool.getName()).thenReturn("screwdriver");
+    when(mockedTool.takeThing(mockedInventory, mockedContents)).thenReturn("You pick up the screwdriver");
     when(mockedPlayer.getCurrentRoom()).thenReturn(mockedRoom);
     when(mockedPlayer.getInventory()).thenReturn(mockedInventory);
     BoardWindow mockedBoardWindow = mock(BoardWindow.class);
@@ -418,9 +430,9 @@ class GameTest {
   @Test
   void runCommand_UseCommand_NullInput() {
     String mockedCommand = "use";
-    HashMap<String, RoomThingTool> mockedInventory = new HashMap<>();
-    RoomThingTool mockedRoomThingTool = mock(RoomThingTool.class);
-    mockedInventory.put("screwdriver", mockedRoomThingTool);
+    HashMap<String, Tool> mockedInventory = new HashMap<>();
+    Tool mockedTool = mock(Tool.class);
+    mockedInventory.put("screwdriver", mockedTool);
     when(mockedPlayer.getInventory()).thenReturn(mockedInventory);
     when(mockedPlayer.getCurrentRoom()).thenReturn(mockedRoom);
     BoardWindow mockedBoardWindow = mock(BoardWindow.class);
@@ -435,9 +447,9 @@ class GameTest {
   @Test
   void runCommand_UseCommand_NotInInventory() {
     String mockedCommand = "use screwdriver grate";
-    HashMap<String, RoomThingTool> mockedInventory = new HashMap<>();
-    RoomThingTool mockedRoomThingTool = mock(RoomThingTool.class);
-    mockedInventory.put("hammer", mockedRoomThingTool);
+    HashMap<String, Tool> mockedInventory = new HashMap<>();
+    Tool mockedTool = mock(Tool.class);
+    mockedInventory.put("hammer", mockedTool);
     when(mockedPlayer.getInventory()).thenReturn(mockedInventory);
     when(mockedPlayer.getCurrentRoom()).thenReturn(mockedRoom);
     BoardWindow mockedBoardWindow = mock(BoardWindow.class);
@@ -452,9 +464,9 @@ class GameTest {
   @Test
   void runCommand_UseCommand_NullInputTwo() {
     String mockedCommand = "use screwdriver";
-    HashMap<String, RoomThingTool> mockedInventory = new HashMap<>();
-    RoomThingTool mockedRoomThingTool = mock(RoomThingTool.class);
-    mockedInventory.put("screwdriver", mockedRoomThingTool);
+    HashMap<String, Tool> mockedInventory = new HashMap<>();
+    Tool mockedTool = mock(Tool.class);
+    mockedInventory.put("screwdriver", mockedTool);
     when(mockedPlayer.getInventory()).thenReturn(mockedInventory);
     when(mockedPlayer.getCurrentRoom()).thenReturn(mockedRoom);
     BoardWindow mockedBoardWindow = mock(BoardWindow.class);
@@ -469,12 +481,12 @@ class GameTest {
   @Test
   void runCommand_UseCommand_NotInRoom() {
     String mockedCommand = "use screwdriver grate";
-    HashMap<String, RoomThingTool> mockedInventory = new HashMap<>();
-    RoomThingTool mockedRoomThingTool = mock(RoomThingTool.class);
-    RoomThingDecoration mockedRoomThingDecoration = mock(RoomThingDecoration.class);
-    mockedInventory.put("screwdriver", mockedRoomThingTool);
+    HashMap<String, Tool> mockedInventory = new HashMap<>();
+    Tool mockedTool = mock(Tool.class);
+    Decoration mockedDecoration = mock(Decoration.class);
+    mockedInventory.put("screwdriver", mockedTool);
     HashMap<String, RoomThing> mockedContents = new HashMap<>();
-    mockedContents.put("chandelier", mockedRoomThingDecoration);
+    mockedContents.put("chandelier", mockedDecoration);
     when(mockedRoom.getContents()).thenReturn(mockedContents);
     when(mockedPlayer.getInventory()).thenReturn(mockedInventory);
     when(mockedPlayer.getCurrentRoom()).thenReturn(mockedRoom);
@@ -490,16 +502,16 @@ class GameTest {
   @Test
   void runCommand_UseCommand_WrongUse() {
     String mockedCommand = "use screwdriver grate";
-    RoomThingTool mockedRoomThingTool = mock(RoomThingTool.class);
-    HashMap<String, RoomThingTool> mockedInventory = new HashMap<>();
-    mockedInventory.put("screwdriver", mockedRoomThingTool);
+    Tool mockedTool = mock(Tool.class);
+    HashMap<String, Tool> mockedInventory = new HashMap<>();
+    mockedInventory.put("screwdriver", mockedTool);
     when(mockedPlayer.getInventory()).thenReturn(mockedInventory);
-    when(mockedRoomThingTool.getName()).thenReturn("screwdriver");
-    RoomThingDecoration mockedRoomThingDecoration = mock(RoomThingDecoration.class);
+    when(mockedTool.getName()).thenReturn("screwdriver");
+    Decoration mockedDecoration = mock(Decoration.class);
     HashMap<String, RoomThing> mockedContents = new HashMap<>();
-    mockedContents.put("grate", mockedRoomThingDecoration);
+    mockedContents.put("grate", mockedDecoration);
     when(mockedRoom.getContents()).thenReturn(mockedContents);
-    when(mockedRoomThingDecoration.getName()).thenReturn("grate");
+    when(mockedDecoration.getName()).thenReturn("grate");
     when(mockedRoom.getName()).thenReturn("brig");
     when(mockedPlayer.getCurrentRoom()).thenReturn(mockedRoom);
     BoardWindow mockedBoardWindow = mock(BoardWindow.class);
@@ -514,16 +526,16 @@ class GameTest {
   @Test
   void runCommand_UseCommand_Correct() {
     String mockedCommand = "use screwdriver vent";
-    RoomThingTool mockedRoomThingTool = mock(RoomThingTool.class);
-    HashMap<String, RoomThingTool> mockedInventory = new HashMap<>();
-    mockedInventory.put("screwdriver", mockedRoomThingTool);
+    Tool mockedTool = mock(Tool.class);
+    HashMap<String, Tool> mockedInventory = new HashMap<>();
+    mockedInventory.put("screwdriver", mockedTool);
     when(mockedPlayer.getInventory()).thenReturn(mockedInventory);
-    when(mockedRoomThingTool.getName()).thenReturn("screwdriver");
-    RoomThingDecoration mockedRoomThingDecoration = mock(RoomThingDecoration.class);
+    when(mockedTool.getName()).thenReturn("screwdriver");
+    Decoration mockedDecoration = mock(Decoration.class);
     HashMap<String, RoomThing> mockedContents = new HashMap<>();
-    mockedContents.put("vent", mockedRoomThingDecoration);
+    mockedContents.put("vent", mockedDecoration);
     when(mockedRoom.getContents()).thenReturn(mockedContents);
-    when(mockedRoomThingDecoration.getName()).thenReturn("vent");
+    when(mockedDecoration.getName()).thenReturn("vent");
     when(mockedRoom.getName()).thenReturn("office");
     when(mockedPlayer.getCurrentRoom()).thenReturn(mockedRoom);
     HashMap<String, Room> mockedLevelRooms = new HashMap<>();
@@ -554,6 +566,7 @@ class GameTest {
     String expected = "Are you trying to show the map?";
     assertEquals(expected, actual);
   }
+
   @Test
   void runCommand_ShowMapCommand_Wrong() {
     String mockedCommand = "show mop";
@@ -566,6 +579,7 @@ class GameTest {
     String expected = "Pardon?";
     assertEquals(expected, actual);
   }
+
   @Test
   void runCommand_ShowMapCommand_Correct() {
     String mockedCommand = "show map";
@@ -593,6 +607,7 @@ class GameTest {
     String expected = "What are you hiding?";
     assertEquals(expected, actual);
   }
+
   @Test
   void runCommand_HideMapCommand_Wrong() {
     String mockedCommand = "hide mop";
@@ -605,6 +620,7 @@ class GameTest {
     String expected = "What do you want to do?";
     assertEquals(expected, actual);
   }
+
   @Test
   void runCommand_HideMapCommand_Correct() {
     String mockedCommand = "hide map";
@@ -632,6 +648,7 @@ class GameTest {
     String expected = "Are you trying to cheat?";
     assertEquals(expected, actual);
   }
+
   @Test
   void runCommand_CheatCommand_WrongCheat() {
     String mockedCommand = "cheat NOT-A-CHEAT";
@@ -644,10 +661,11 @@ class GameTest {
     String expected = "Cheat failed, ya cheater.";
     assertEquals(expected, actual);
   }
+
   @Test
   void runCommand_CheatCommand_Primus() {
     String mockedCommand = "cheat primus";
-    HashMap<String, RoomThingTool> mockedInventory = new HashMap<>();
+    HashMap<String, Tool> mockedInventory = new HashMap<>();
     when(mockedPlayer.getCurrentRoom()).thenReturn(mockedRoom);
     when(mockedPlayer.getInventory()).thenReturn(mockedInventory);
     HashMap<String, Room> mockedLevelRooms = new HashMap<>();
@@ -661,11 +679,6 @@ class GameTest {
     String expected = "You have skipped level one.";
     assertEquals(expected, actual);
   }
-
-
-
-
-
 
 
 }
