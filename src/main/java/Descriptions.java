@@ -1,7 +1,11 @@
+import java.util.HashMap;
+import java.util.Map;
 
 public class Descriptions {
 
   //General Descriptions
+
+  public static final HashMap<String, Integer> MAP_SIZE = new HashMap<>(Map.of("width", 7, "height", 6));
 
   public static final String BOOT_MESSAGE = "Welcome to Starship Stowaway! I hope you enjoy the game, and type 'help' if you need any guidance with the commands. -DW" +
           "\nYou awaken in the tiny gloomy room you managed to hideaway in on the IPSS MoonGazer, your nav-card bleeping to signal that this is" +

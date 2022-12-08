@@ -9,32 +9,29 @@ public class Room {
   private final HashMap<Direction, Room> directions;
 
   private final HashMap<String, RoomThing> contents;
+  private final int levelWidth;
+  private final int levelHeight;
   private int row;
-
   private int column;
 
-  private final int levelWidth;
-
-  private final int levelHeight;
-
-  public Room(String name, String description, int levelWidth, int levelHeight) {
+  public Room(String name, String description) {
     this.name = name;
     this.description = description;
     this.directions = new HashMap<>();
     this.contents = new HashMap<>();
-    this.levelWidth = levelWidth;
-    this.levelHeight = levelHeight;
+    this.levelWidth = Descriptions.MAP_SIZE.get("width");
+    this.levelHeight = Descriptions.MAP_SIZE.get("height");
   }
 
-  public Room(String name, String description, int levelWidth, int levelHeight, int row, int column) {
+  public Room(String name, String description, int row, int column) {
     this.name = name;
     this.description = description;
     this.row = row;
     this.column = column;
     this.directions = new HashMap<>();
     this.contents = new HashMap<>();
-    this.levelWidth = levelWidth;
-    this.levelHeight = levelHeight;
+    this.levelWidth = Descriptions.MAP_SIZE.get("width");
+    this.levelHeight = Descriptions.MAP_SIZE.get("height");
   }
 
   public String getName() {
@@ -69,6 +66,7 @@ public class Room {
     }
     this.directions.put(direction, room);
   }
+
   public String getDescription() {
     return description;
   }
@@ -98,7 +96,7 @@ public class Room {
   }
 
   public void addContents(RoomThing thing) {
-    this.contents.put(thing.name.toLowerCase(), thing);
+    this.contents.put(thing.getName().toLowerCase(), thing);
   }
 
   public String listContents() {
