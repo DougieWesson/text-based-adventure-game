@@ -56,12 +56,6 @@ public class Game {
         case "talk":
           feedback = talkToCommand(command);
           break;
-        case "show":
-          feedback = showMap(command);
-          break;
-        case "hide":
-          feedback = hideMap(command);
-          break;
         case "take":
         case "grab":
         case "get":
@@ -117,7 +111,7 @@ public class Game {
       }
       if (hasFinishedGame()) {
         feedback = levelThree.getSuccessMessage()
-//                + "\n Do you want to restart, or quit?"
+                + "\n Do you want to quit?"
         ;
       }
     }
@@ -438,27 +432,27 @@ public class Game {
     }
   }
 
-  public String showMap(String command) {
-    if (command.split(" ").length < 2) return "Are you trying to show the map?";
-    String input = command.split(" ")[1];
-    if (input.equals("map")) {
-      this.getCurrentLevel().getBoardWindow().showBoard();
-      return "Map shown";
-    } else {
-      return "Pardon?";
-    }
-  }
-
-  public String hideMap(String command) {
-    if (command.split(" ").length < 2) return "Are you trying to hide the map?";
-    String input = command.split(" ")[1];
-    if (input.equals("map")) {
-      this.getCurrentLevel().getBoardWindow().hideBoard();
-      return "Map hidden";
-    } else {
-      return "Pardon?";
-    }
-  }
+//  public String showMap(String command) {
+//    if (command.split(" ").length < 2) return "Are you trying to show the map?";
+//    String input = command.split(" ")[1];
+//    if (input.equals("map")) {
+//      this.getCurrentLevel().getBoardWindow().showBoard();
+//      return "Map shown";
+//    } else {
+//      return "Pardon?";
+//    }
+//  }
+//
+//  public String hideMap(String command) {
+//    if (command.split(" ").length < 2) return "Are you trying to hide the map?";
+//    String input = command.split(" ")[1];
+//    if (input.equals("map")) {
+//      this.getCurrentLevel().getBoardWindow().hideBoard();
+//      return "Map hidden";
+//    } else {
+//      return "Pardon?";
+//    }
+//  }
 
   public String checkInventory() {
     if (player.getInventory().isEmpty()) {
