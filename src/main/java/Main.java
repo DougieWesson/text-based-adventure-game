@@ -4,14 +4,7 @@ public class Main {
   public static Game game;
 
   public static void main(String[] args) {
-    Level levelOne = initLevel1();
-    Level levelTwo = initLevel2();
-    levelTwo.getBoardWindow().hideBoard();
-    Level levelThree = initLevel3();
-    levelThree.getBoardWindow().hideBoard();
-    game = new Game(new Player(levelOne.getStartingRoom(), levelOne), levelOne, levelTwo, levelThree);
-    game.getCurrentLevel().getBoardWindow().getInputField().addKeyListener(new UserInput(game));
-    game.getCurrentLevel().getBoardWindow().getTextArea().append(Descriptions.BOOT_MESSAGE);
+    game = startGame();
     Scanner scanner = new Scanner(System.in);
     String input;
     String output;
@@ -23,15 +16,26 @@ public class Main {
         System.out.println(output);
       }
       if (game.hasFinishedGame() && !input.equals("quit")) {
-        if (input.equals("yes")) {
-          output = game.getPlayer().setCurrentRoom(levelOne.getStartingRoom());
-          System.out.println(output);
+        if (input.equals("restart")) {
+          game = startGame();
         } else {
-          System.out.println("Do you want to restart, enter yes or quit?");
+          System.out.println("Do you want to restart or quit?");
         }
       }
     } while (!"quit".equals(input));
     System.exit(0);
+  }
+
+  public static Game startGame() {
+    Level levelOne = initLevel1();
+    Level levelTwo = initLevel2();
+    levelTwo.getBoardWindow().hideBoard();
+    Level levelThree = initLevel3();
+    levelThree.getBoardWindow().hideBoard();
+    game = new Game(new Player(levelOne.getStartingRoom(), levelOne), levelOne, levelTwo, levelThree);
+    game.getCurrentLevel().getBoardWindow().getInputField().addKeyListener(new UserInput(game));
+    game.getCurrentLevel().getBoardWindow().getTextArea().append(Descriptions.BOOT_MESSAGE);
+    return game;
   }
 
   private static Level initLevel1() {
@@ -51,7 +55,8 @@ public class Main {
     workshop.putDirection(Direction.NORTH, hallway);
     office.putDirection(Direction.SOUTH, hallway);
 
-    hallway.addContents(new Character("Jimbo", "A service-bot, short and neat, but rather dusty. He's prone to loops apparently...", "Howdy there, lemme open up this here locker room for ya. By the way, I put that screwdriver back in the workshop, keep things nice and tidy."));
+    hallway.addContents(new Character("Jimbo", "A service-bot, short and neat, but rather dusty. He's prone to loops apparently...",
+            "Howdy there, lemme open up this here locker room for ya. By the way, I put that screwdriver back in the workshop, keep things nice and tidy."));
     hallway.addContents(new Tool("hammer", "A great big hammer, looks dangerous"));
     hallway.addContents(new Decoration("light", "Shiny."));
     office.addContents(new Decoration("vent", "It's the vent you crawled through to get in here, usually covered with a metal cover."));

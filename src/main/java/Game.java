@@ -31,7 +31,7 @@ public class Game {
   }
 
   public boolean hasFinishedGame() {
-    return this.player.getCurrentRoom().equals(levelThree.getEndingRoom());
+    return player.getCurrentRoom().equals(levelThree.getEndingRoom());
   }
 
   public String runCommand(String command) {
@@ -96,27 +96,29 @@ public class Game {
       if (hasFinishedLevelOne()) {
         this.levelOne.getBoardWindow().hideBoard();
         this.levelTwo.getBoardWindow().showBoard();
-        feedback = levelOne.getSuccessMessage();
         this.getPlayer().setCurrentRoom(levelTwo.getStartingRoom());
         this.setCurrentLevel(levelTwo);
         getCurrentLevel().getBoardWindow().getInputField().addKeyListener(new UserInput(this));
         this.getPlayer().setLevel(levelTwo);
         this.getCurrentLevel().getBoardWindow().getBoard().setCell(this.player.getCurrentRoom().getRow(), this.player.getCurrentRoom().getColumn(), CellType.CURRENT_ROOM);
         this.levelTwo.getBoardWindow().repaint();
+        feedback = levelOne.getSuccessMessage();
       }
       if (hasFinishedLevelTwo()) {
         this.levelTwo.getBoardWindow().hideBoard();
         this.levelThree.getBoardWindow().showBoard();
-        feedback = levelTwo.getSuccessMessage();
         this.getPlayer().setCurrentRoom(levelThree.getStartingRoom());
         this.setCurrentLevel(levelThree);
         getCurrentLevel().getBoardWindow().getInputField().addKeyListener(new UserInput(this));
         this.getPlayer().setLevel(levelThree);
         this.getCurrentLevel().getBoardWindow().getBoard().setCell(this.player.getCurrentRoom().getRow(), this.player.getCurrentRoom().getColumn(), CellType.CURRENT_ROOM);
         this.levelThree.getBoardWindow().repaint();
+        feedback = levelTwo.getSuccessMessage();
       }
       if (hasFinishedGame()) {
-        feedback = levelThree.getSuccessMessage();
+        feedback = levelThree.getSuccessMessage()
+//                + "\n Do you want to restart, or quit?"
+        ;
       }
     }
     currentLevel.getBoardWindow().getTextArea().append("\n" + feedback);
@@ -133,15 +135,19 @@ public class Game {
       String direction = command.split(" ")[1];
       switch (direction) {
         case "north":
+        case "up":
           feedback = player.move(Direction.NORTH);
           break;
         case "east":
+        case "right":
           feedback = player.move(Direction.EAST);
           break;
         case "south":
+        case "down":
           feedback = player.move(Direction.SOUTH);
           break;
         case "west":
+        case "left":
           feedback = player.move(Direction.WEST);
           break;
         default:
@@ -228,31 +234,13 @@ public class Game {
   }
 
   public String validateUseCommand(String command) {
-    String firstInput;
-    String secondInput;
-    if (player.getInventory().isEmpty()) {
-      return "You don't have anything to use.";
-    }
-    try {
-      firstInput = command.split(" ")[1];
-    } catch (Exception e) {
-      return "What do you want to use?";
-    }
-    try {
-      String firstThing = player.getInventory().get(firstInput).getName();
-    } catch (Exception e) {
-      return "That's not a thing in your inventory.";
-    }
-    try {
-      secondInput = command.split(" ")[2];
-    } catch (Exception e) {
-      return "What do you want to use that on?";
-    }
-    try {
-      player.getCurrentRoom().getContents().get(secondInput).getName();
-    } catch (Exception e) {
-      return "That's not a thing in this room.";
-    }
+    if (player.getInventory().isEmpty()) return "You don't have anything to use.";
+    if (command.split(" ").length < 2) return "What do you want to use?";
+    String firstInput = command.split(" ")[1];
+    if (!player.getInventory().containsKey(firstInput)) return "That's not a thing in your inventory.";
+    if (command.split(" ").length < 3) return "What do you want to use that on?";
+    String secondInput = command.split(" ")[2];
+    if (!player.getCurrentRoom().getContents().containsKey(secondInput)) return "That's not a thing in this room.";
     return "No errors";
   }
 
@@ -393,28 +381,12 @@ public class Game {
   }
 
   public String validateTalkCommand(String command) {
-    String input;
-    if (player.getCurrentRoom().getContents().isEmpty()) {
-      return "This is an empty room...";
-    }
-    try {
-      input = command.split(" ")[1];
-    } catch (Exception e) {
-      return "Who did you want to talk to?";
-    }
-    input = command.split(" ")[1].toLowerCase();
-    try {
-      player.getCurrentRoom().getContents().get(input).getName();
-    } catch (Exception e) {
-      return "That's not something in this room";
-    }
+    if (player.getCurrentRoom().getContents().isEmpty()) return "This is an empty room...";
+    if (command.split(" ").length < 2) return "Who did you want to talk to?";
+    String input = command.split(" ")[1].toLowerCase();
+    if (!player.getCurrentRoom().getContents().containsKey(input)) return "That's not something in this room";
     RoomThing foundItem = player.getCurrentRoom().getContents().get(input);
-    // checks if the found item is speakable / a character
-    if (SpeakableChecker.isSpeakable(foundItem)) {
-      return "No errors";
-    } else {
-      return "It doesn't talk back.";
-    }
+    return SpeakableChecker.isSpeakable(foundItem) ? "No errors" : "It doesn't talk back.";
   }
 
   public String talkToCommand(String command) {
@@ -448,26 +420,12 @@ public class Game {
 
   public String validateTakeCommand(String command) {
     String input;
-    if (player.getCurrentRoom().getContents().isEmpty()) {
-      return "This room is empty.";
-    }
-    try {
-      input = command.split(" ")[1];
-    } catch (Exception e) {
-      return "What do you want to take?";
-    }
+    if (player.getCurrentRoom().getContents().isEmpty()) return "This room is empty.";
+    if (command.split(" ").length < 2) return "What do you want to take?";
     input = command.split(" ")[1];
-    try {
-      player.getCurrentRoom().getContents().get(input).getName();
-    } catch (Exception e) {
-      return "That's not something in this room.";
-    }
+    if (!player.getCurrentRoom().getContents().containsKey(input)) return "That's not something in this room";
     RoomThing foundItem = player.getCurrentRoom().getContents().get(input);
-    if (TakeableChecker.isTakeable(foundItem)) {
-      return "No errors";
-    } else {
-      return "You can't take that.";
-    }
+    return TakeableChecker.isTakeable(foundItem) ? "No errors" : "You can't take that.";
   }
 
   public String takeCommand(String command) {
@@ -481,13 +439,8 @@ public class Game {
   }
 
   public String showMap(String command) {
-    String input;
-    try {
-      input = command.split(" ")[1];
-    } catch (Exception e) {
-      return "Are you trying to show the map?";
-    }
-    input = command.split(" ")[1];
+    if (command.split(" ").length < 2) return "Are you trying to show the map?";
+    String input = command.split(" ")[1];
     if (input.equals("map")) {
       this.getCurrentLevel().getBoardWindow().showBoard();
       return "Map shown";
@@ -497,17 +450,14 @@ public class Game {
   }
 
   public String hideMap(String command) {
-    String feedback = "What do you want to do?";
-    try {
-      String input = command.split(" ")[1];
-      if ("map".equals(input)) {
-        this.getCurrentLevel().getBoardWindow().hideBoard();
-        feedback = "Map hidden";
-      }
-    } catch (Exception e) {
-      feedback = "What are you hiding?";
+    if (command.split(" ").length < 2) return "Are you trying to hide the map?";
+    String input = command.split(" ")[1];
+    if (input.equals("map")) {
+      this.getCurrentLevel().getBoardWindow().hideBoard();
+      return "Map hidden";
+    } else {
+      return "Pardon?";
     }
-    return feedback;
   }
 
   public String checkInventory() {
@@ -525,11 +475,7 @@ public class Game {
   }
 
   public String validateCheatCommand(String command) {
-    try {
-      String input = command.split(" ")[1];
-    } catch (Exception e) {
-      return "Are you trying to cheat?";
-    }
+    if (command.split(" ").length < 2) return "Are you trying to cheat?";
     return "No errors";
   }
 

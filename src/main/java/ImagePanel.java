@@ -9,7 +9,7 @@ public class ImagePanel extends JPanel {
 
     private BufferedImage image;
 
-    private JFrame frame;
+    private final JFrame frame;
 
     public ImagePanel(String imageFileName) {
         this.frame = new JFrame();
