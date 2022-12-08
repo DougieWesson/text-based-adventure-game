@@ -1,10 +1,6 @@
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.text.DefaultCaret;
 import java.awt.*;
-import java.awt.image.ImageObserver;
-import java.io.File;
-import java.io.IOException;
 
 public class BoardWindow extends Canvas {
 

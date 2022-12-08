@@ -10,7 +10,7 @@ Game actions typically involve moving from location to location (for simplicity,
 
 The aim of the game could be to navigate to a specific location or to satisfy some other requirement.
 
-The content (story, characters, items, places, hints, etc) are for you to invent.
+The content (story, characters, items, places, hints, etc.) are for you to invent.
 
 I have written the following user stories to allow you to keep to a set structure and to constrain the scope.
 
@@ -80,7 +80,7 @@ Acceptance criteria
 
 ### 5-6 Room images
 As a player...<br>
-...I want some rooms to show an image to reepresent it
+...I want some rooms to show an image to represent it
 ...so that I have some visual feedback to enhance the game play experience.
 
 Acceptance criteria
