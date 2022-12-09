@@ -23,11 +23,11 @@ public class Game {
   }
 
   public boolean hasFinishedLevelOne() {
-    return this.player.getCurrentRoom().equals(levelOne.getEndingRoom());
+    return player.getCurrentRoom().equals(levelOne.getEndingRoom());
   }
 
   public boolean hasFinishedLevelTwo() {
-    return this.player.getCurrentRoom().equals(levelTwo.getEndingRoom());
+    return player.getCurrentRoom().equals(levelTwo.getEndingRoom());
   }
 
   public boolean hasFinishedGame() {

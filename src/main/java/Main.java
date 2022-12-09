@@ -24,6 +24,7 @@ public class Main {
     Room office = new Room("office", Descriptions.OFFICE);
     Room vent = new Room("vent", Descriptions.VENT);
 
+    //To ensure map cohesion, room directions must be added from the starting room outwards.
     brig.putDirection(Direction.EAST, hallway);
 
     hallway.putDirection(Direction.NORTH, office);

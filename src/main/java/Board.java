@@ -1,12 +1,10 @@
 public class Board {
 
-  private final int rowCount;
-  private final int columnCount;
   private Cell[][] cells;
 
-  public Board(int rowCount, int columnCount) {
-    this.rowCount = rowCount;
-    this.columnCount = columnCount;
+  public Board() {
+    int rowCount = Descriptions.MAP_HEIGHT;
+    int columnCount = Descriptions.MAP_WIDTH;
     cells = new Cell[rowCount][columnCount];
     for (int i = 0; i < rowCount; i++) {
       for (int j = 0; j < columnCount; j++) {
@@ -21,14 +19,6 @@ public class Board {
 
   public void setCells(Cell[][] cells) {
     this.cells = cells;
-  }
-
-  public int getRowCount() {
-    return rowCount;
-  }
-
-  public int getColumnCount() {
-    return columnCount;
   }
 
   public void setCell(int row, int column, CellType cellType) {

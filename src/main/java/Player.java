@@ -12,6 +12,7 @@ public class Player {
     this.level = level;
     this.level.getBoardWindow().getBoard().setCell(currentRoom.getRow(), currentRoom.getColumn(), CellType.CURRENT_ROOM);
     this.level.getBoardWindow().repaint();
+    this.currentRoom = currentRoom;
   }
 
   public String setCurrentRoom(Room newRoom) {
