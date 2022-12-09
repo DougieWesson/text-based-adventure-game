@@ -16,7 +16,7 @@ public class Level {
         this.levelRooms = new HashMap<>();
         levelRooms.put(startingRoom.getName(), startingRoom);
         levelRooms.put(endingRoom.getName(), endingRoom);
-        Board board = new Board(Descriptions.MAP_SIZE.get("height"), Descriptions.MAP_SIZE.get("width"));
+        Board board = new Board(Descriptions.MAP_HEIGHT, Descriptions.MAP_WIDTH);
         this.boardWindow = new BoardWindow(board, "Area Map", CELL_SIZE);
     }
 

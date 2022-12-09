@@ -9,7 +9,6 @@ public class Player {
 
   public Player(Room currentRoom, Level level) {
     this.inventory = new HashMap<>();
-    System.out.println(setCurrentRoom(currentRoom));
     this.level = level;
     this.level.getBoardWindow().getBoard().setCell(currentRoom.getRow(), currentRoom.getColumn(), CellType.CURRENT_ROOM);
     this.level.getBoardWindow().repaint();
@@ -42,7 +41,6 @@ public class Player {
   public void setLevel(Level level) {
     this.level = level;
   }
-
 
   public Room getCurrentRoom() {
     return currentRoom;

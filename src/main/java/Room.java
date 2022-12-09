@@ -19,8 +19,8 @@ public class Room {
     this.description = description;
     this.directions = new HashMap<>();
     this.contents = new HashMap<>();
-    this.levelWidth = Descriptions.MAP_SIZE.get("width");
-    this.levelHeight = Descriptions.MAP_SIZE.get("height");
+    this.levelWidth = Descriptions.MAP_WIDTH;
+    this.levelHeight = Descriptions.MAP_HEIGHT;
   }
 
   public Room(String name, String description, int row, int column) {
@@ -30,8 +30,8 @@ public class Room {
     this.column = column;
     this.directions = new HashMap<>();
     this.contents = new HashMap<>();
-    this.levelWidth = Descriptions.MAP_SIZE.get("width");
-    this.levelHeight = Descriptions.MAP_SIZE.get("height");
+    this.levelWidth = Descriptions.MAP_WIDTH;
+    this.levelHeight = Descriptions.MAP_HEIGHT;
   }
 
   public String getName() {

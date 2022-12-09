@@ -18,7 +18,8 @@ public class Character implements Speakable, RoomThing {
     return description;
   }
 
+  @Override
   public String talkTo() {
-    return speech;
+    return this.speech;
   }
 }
