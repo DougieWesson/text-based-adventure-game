@@ -432,28 +432,6 @@ public class Game {
     }
   }
 
-//  public String showMap(String command) {
-//    if (command.split(" ").length < 2) return "Are you trying to show the map?";
-//    String input = command.split(" ")[1];
-//    if (input.equals("map")) {
-//      this.getCurrentLevel().getBoardWindow().showBoard();
-//      return "Map shown";
-//    } else {
-//      return "Pardon?";
-//    }
-//  }
-//
-//  public String hideMap(String command) {
-//    if (command.split(" ").length < 2) return "Are you trying to hide the map?";
-//    String input = command.split(" ")[1];
-//    if (input.equals("map")) {
-//      this.getCurrentLevel().getBoardWindow().hideBoard();
-//      return "Map hidden";
-//    } else {
-//      return "Pardon?";
-//    }
-//  }
-
   public String checkInventory() {
     if (player.getInventory().isEmpty()) {
       return "Nothing in your inventory";

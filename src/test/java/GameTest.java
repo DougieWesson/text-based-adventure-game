@@ -554,85 +554,85 @@ class GameTest {
 
 
   //Show Map Command
-  @Test
-  void runCommand_ShowMapCommand_Null() {
-    String mockedCommand = "show";
-    when(mockedPlayer.getCurrentRoom()).thenReturn(mockedRoom);
-    BoardWindow mockedBoardWindow = mock(BoardWindow.class);
-    JTextArea mockedTextArea = mock(JTextArea.class);
-    when(mockedLevelOne.getBoardWindow()).thenReturn(mockedBoardWindow);
-    when(mockedBoardWindow.getTextArea()).thenReturn(mockedTextArea);
-    String actual = gameUnderTest.runCommand(mockedCommand);
-    String expected = "Are you trying to show the map?";
-    assertEquals(expected, actual);
-  }
+//  @Test
+//  void runCommand_ShowMapCommand_Null() {
+//    String mockedCommand = "show";
+//    when(mockedPlayer.getCurrentRoom()).thenReturn(mockedRoom);
+//    BoardWindow mockedBoardWindow = mock(BoardWindow.class);
+//    JTextArea mockedTextArea = mock(JTextArea.class);
+//    when(mockedLevelOne.getBoardWindow()).thenReturn(mockedBoardWindow);
+//    when(mockedBoardWindow.getTextArea()).thenReturn(mockedTextArea);
+//    String actual = gameUnderTest.runCommand(mockedCommand);
+//    String expected = "Are you trying to show the map?";
+//    assertEquals(expected, actual);
+//  }
 
-  @Test
-  void runCommand_ShowMapCommand_Wrong() {
-    String mockedCommand = "show mop";
-    when(mockedPlayer.getCurrentRoom()).thenReturn(mockedRoom);
-    BoardWindow mockedBoardWindow = mock(BoardWindow.class);
-    JTextArea mockedTextArea = mock(JTextArea.class);
-    when(mockedLevelOne.getBoardWindow()).thenReturn(mockedBoardWindow);
-    when(mockedBoardWindow.getTextArea()).thenReturn(mockedTextArea);
-    String actual = gameUnderTest.runCommand(mockedCommand);
-    String expected = "Pardon?";
-    assertEquals(expected, actual);
-  }
+//  @Test
+//  void runCommand_ShowMapCommand_Wrong() {
+//    String mockedCommand = "show mop";
+//    when(mockedPlayer.getCurrentRoom()).thenReturn(mockedRoom);
+//    BoardWindow mockedBoardWindow = mock(BoardWindow.class);
+//    JTextArea mockedTextArea = mock(JTextArea.class);
+//    when(mockedLevelOne.getBoardWindow()).thenReturn(mockedBoardWindow);
+//    when(mockedBoardWindow.getTextArea()).thenReturn(mockedTextArea);
+//    String actual = gameUnderTest.runCommand(mockedCommand);
+//    String expected = "Pardon?";
+//    assertEquals(expected, actual);
+//  }
 
-  @Test
-  void runCommand_ShowMapCommand_Correct() {
-    String mockedCommand = "show map";
-    when(mockedPlayer.getCurrentRoom()).thenReturn(mockedRoom);
-    BoardWindow mockedBoardWindow = mock(BoardWindow.class);
-    JTextArea mockedTextArea = mock(JTextArea.class);
-    when(mockedLevelOne.getBoardWindow()).thenReturn(mockedBoardWindow);
-    when(mockedBoardWindow.getTextArea()).thenReturn(mockedTextArea);
-    String actual = gameUnderTest.runCommand(mockedCommand);
-    String expected = "Map shown";
-    assertEquals(expected, actual);
-  }
+//  @Test
+//  void runCommand_ShowMapCommand_Correct() {
+//    String mockedCommand = "show map";
+//    when(mockedPlayer.getCurrentRoom()).thenReturn(mockedRoom);
+//    BoardWindow mockedBoardWindow = mock(BoardWindow.class);
+//    JTextArea mockedTextArea = mock(JTextArea.class);
+//    when(mockedLevelOne.getBoardWindow()).thenReturn(mockedBoardWindow);
+//    when(mockedBoardWindow.getTextArea()).thenReturn(mockedTextArea);
+//    String actual = gameUnderTest.runCommand(mockedCommand);
+//    String expected = "Map shown";
+//    assertEquals(expected, actual);
+//  }
 
 
   //Hide Map Command
-  @Test
-  void runCommand_HideMapCommand_Null() {
-    String mockedCommand = "hide";
-    when(mockedPlayer.getCurrentRoom()).thenReturn(mockedRoom);
-    BoardWindow mockedBoardWindow = mock(BoardWindow.class);
-    JTextArea mockedTextArea = mock(JTextArea.class);
-    when(mockedLevelOne.getBoardWindow()).thenReturn(mockedBoardWindow);
-    when(mockedBoardWindow.getTextArea()).thenReturn(mockedTextArea);
-    String actual = gameUnderTest.runCommand(mockedCommand);
-    String expected = "What are you hiding?";
-    assertEquals(expected, actual);
-  }
+//  @Test
+//  void runCommand_HideMapCommand_Null() {
+//    String mockedCommand = "hide";
+//    when(mockedPlayer.getCurrentRoom()).thenReturn(mockedRoom);
+//    BoardWindow mockedBoardWindow = mock(BoardWindow.class);
+//    JTextArea mockedTextArea = mock(JTextArea.class);
+//    when(mockedLevelOne.getBoardWindow()).thenReturn(mockedBoardWindow);
+//    when(mockedBoardWindow.getTextArea()).thenReturn(mockedTextArea);
+//    String actual = gameUnderTest.runCommand(mockedCommand);
+//    String expected = "What are you hiding?";
+//    assertEquals(expected, actual);
+//  }
 
-  @Test
-  void runCommand_HideMapCommand_Wrong() {
-    String mockedCommand = "hide mop";
-    when(mockedPlayer.getCurrentRoom()).thenReturn(mockedRoom);
-    BoardWindow mockedBoardWindow = mock(BoardWindow.class);
-    JTextArea mockedTextArea = mock(JTextArea.class);
-    when(mockedLevelOne.getBoardWindow()).thenReturn(mockedBoardWindow);
-    when(mockedBoardWindow.getTextArea()).thenReturn(mockedTextArea);
-    String actual = gameUnderTest.runCommand(mockedCommand);
-    String expected = "What do you want to do?";
-    assertEquals(expected, actual);
-  }
+//  @Test
+//  void runCommand_HideMapCommand_Wrong() {
+//    String mockedCommand = "hide mop";
+//    when(mockedPlayer.getCurrentRoom()).thenReturn(mockedRoom);
+//    BoardWindow mockedBoardWindow = mock(BoardWindow.class);
+//    JTextArea mockedTextArea = mock(JTextArea.class);
+//    when(mockedLevelOne.getBoardWindow()).thenReturn(mockedBoardWindow);
+//    when(mockedBoardWindow.getTextArea()).thenReturn(mockedTextArea);
+//    String actual = gameUnderTest.runCommand(mockedCommand);
+//    String expected = "What do you want to do?";
+//    assertEquals(expected, actual);
+//  }
 
-  @Test
-  void runCommand_HideMapCommand_Correct() {
-    String mockedCommand = "hide map";
-    when(mockedPlayer.getCurrentRoom()).thenReturn(mockedRoom);
-    BoardWindow mockedBoardWindow = mock(BoardWindow.class);
-    JTextArea mockedTextArea = mock(JTextArea.class);
-    when(mockedLevelOne.getBoardWindow()).thenReturn(mockedBoardWindow);
-    when(mockedBoardWindow.getTextArea()).thenReturn(mockedTextArea);
-    String actual = gameUnderTest.runCommand(mockedCommand);
-    String expected = "Map hidden";
-    assertEquals(expected, actual);
-  }
+//  @Test
+//  void runCommand_HideMapCommand_Correct() {
+//    String mockedCommand = "hide map";
+//    when(mockedPlayer.getCurrentRoom()).thenReturn(mockedRoom);
+//    BoardWindow mockedBoardWindow = mock(BoardWindow.class);
+//    JTextArea mockedTextArea = mock(JTextArea.class);
+//    when(mockedLevelOne.getBoardWindow()).thenReturn(mockedBoardWindow);
+//    when(mockedBoardWindow.getTextArea()).thenReturn(mockedTextArea);
+//    String actual = gameUnderTest.runCommand(mockedCommand);
+//    String expected = "Map hidden";
+//    assertEquals(expected, actual);
+//  }
 
 
   //Cheat Command
